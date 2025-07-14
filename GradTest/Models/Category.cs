@@ -3,7 +3,9 @@ using Ardalis.SmartEnum;
 
 public sealed class Category: SmartEnum<Category>
 {
-    public static readonly Category FOOD = new Category("FOOD",1, 1000, true);
+    public static readonly Category ELECTRONICS = new Category("ELECTRONICS",1, 1000, true);
+    public static readonly Category BOOKS = new Category("BOOK", 2, 1000, true);
+    public static readonly Category CLOTHING = new Category("CLOTHING", 3, 1000, true);    
     
     public decimal Price { get; private set; }
     public bool InStock { get; private set; }
