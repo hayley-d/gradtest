@@ -7,6 +7,7 @@ public static class ProductEndpoint
 {
     public static void GetPrducts(this IEndpointRouteBuilder builder)
     {
+        // Gets a single product using the product ID
         builder.MapGet("/products/{id}", async (ApplicationDbContext context, Guid id) =>
         {
             var product = await context.Products.FindAsync(id);
@@ -14,7 +15,7 @@ public static class ProductEndpoint
             {
                 return Results.NotFound();
             }
-            return Results.Ok(product);
+            return Results.Ok(new ProductResponse(product));
         });
     }
 }
