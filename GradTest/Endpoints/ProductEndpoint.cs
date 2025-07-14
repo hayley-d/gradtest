@@ -1,4 +1,5 @@
 using GradTest.Models;
+using GradTest.Persistence;
 
 namespace GradTest.Endpoints;
 
@@ -6,9 +7,14 @@ public static class ProductEndpoint
 {
     public static void GetPrducts(this IEndpointRouteBuilder builder)
     {
-        builder.MapGet("/products", async (ApplicationDbContext context) =>
+        builder.MapGet("/products/{id}", async (ApplicationDbContext context, Guid id) =>
         {
-            // TODO: Make get all products endpoint
+            var product = await context.Products.FindAsync(id);
+            if (product is null)
+            {
+                return Results.NotFound();
+            }
+            return Results.Ok(product);
         });
     }
 }

@@ -2,10 +2,10 @@ namespace GradTest.Models;
 
 public class Product
 {
-    Guid Id { get; set; }
-    string Name { get; set; }
-    string Description { get; set; }
-    Category Category { get; set; }
-    decimal Price { get; set; }
-    int StockQuantity { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public Category Category { get; set; }
+    public decimal Price { get; set; }
+    public int StockQuantity { get; set; }
 }
