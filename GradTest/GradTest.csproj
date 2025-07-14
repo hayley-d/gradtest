@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Endpoints\" />
+    <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.18" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ardalis.SmartEnum" Version="8.2.0" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 
 </Project>
