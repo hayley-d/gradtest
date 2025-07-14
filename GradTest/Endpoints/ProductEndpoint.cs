@@ -5,7 +5,7 @@ namespace GradTest.Endpoints;
 
 public static class ProductEndpoint
 {
-    public static void GetPrducts(this IEndpointRouteBuilder builder)
+    public static void GetProducts(this IEndpointRouteBuilder builder)
     {
         // Gets a single product using the product ID
         builder.MapGet("/products/{id}", async (ApplicationDbContext context, Guid id) =>
@@ -23,12 +23,12 @@ public static class ProductEndpoint
     public static void CreateProduct(this IEndpointRouteBuilder builder)
     {
         builder.MapPost("/product",
-            async (ApplicationDbContext ApplicationDbContext, HttpContext httpContext, ProductRequest req) =>
+            async (ApplicationDbContext context, ProductRequest req) =>
             {
-                Product? newProduct = new Product(req);
-                await ApplicationDbContext.Products.AddAsync(newProduct);
-                await ApplicationDbContext.SaveChangesAsync();
-                return Results.Created($"/product/{newProduct.Id}", newProduct);
+                Product newProduct = new Product(req);
+                await context.Products.AddAsync(newProduct);
+                await context.SaveChangesAsync();
+                return Results.Created($"/product/{newProduct.Id}", new ProductResponse(newProduct));
             });
     }
 
@@ -53,7 +53,7 @@ public static class ProductEndpoint
         });
     }
 
-    // Removes a product of the speccified ID
+    // Removes a product of the specified ID
     public static void DeleteProduct(this IEndpointRouteBuilder builder)
     {
         builder.MapDelete("/products/{id}", async (ApplicationDbContext context, Guid id) =>
