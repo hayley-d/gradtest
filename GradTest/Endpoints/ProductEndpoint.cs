@@ -18,4 +18,17 @@ public static class ProductEndpoint
             return Results.Ok(new ProductResponse(product));
         });
     }
+
+    // Creates a new product
+    public static void CreateProduct(this IEndpointRouteBuilder builder)
+    {
+        builder.MapPost("/product",
+            async (ApplicationDbContext ApplicationDbContext, HttpContext httpContext, ProductRequest product) =>
+            {
+                Product newProduct = new Product(product);
+                await ApplicationDbContext.Products.AddAsync(newProduct);
+                await ApplicationDbContext.SaveChangesAsync();
+                return Results.Created($"/product/{newProduct.Id}", newProduct);
+            });
+    }
 }
