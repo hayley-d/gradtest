@@ -25,38 +25,29 @@ public static class ProductEndpoint
     public static void ListProducts(this IEndpointRouteBuilder builder)
     {
         builder.MapGet("/products",
-            async (ApplicationDbContext context, string? category = null, decimal? minPrice = null,
-                decimal? maxPrice = null, int pageNumber=0, int pageSize=10) =>
+            async (ApplicationDbContext context, [AsParameters] ProductQueryRequest query) =>
             {
-                if(pageNumber < 1)
-                    pageNumber = 1;
+                int validatedPageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
+                int validatedPageSize = (query.PageSize < 1 || query.PageSize > 100) ? 10 : query.PageSize;
 
-                if (pageSize < 1 || pageSize > 100)
-                {
-                    pageSize = 10;
-                }
-                
-                var query = context.Products.AsQueryable();
-                if (!string.IsNullOrEmpty(category))
-                {
-                    var categoryEnum = Category.List.FirstOrDefault(c => c.Name.Equals(category, StringComparison.OrdinalIgnoreCase));
-                    if (categoryEnum is not null)
-                    {
-                        query = query.Where(c => c.Category == categoryEnum);
-                    }
-                }
-                if (minPrice is not null) 
-                    query = query.Where(c => c.Price >= minPrice);
-                
-                if (maxPrice is not null)
-                    query = query.Where(c => c.Price <= maxPrice);
-                
-                int totalCount = await query.CountAsync();
-                int totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-                
-                var items = await query.OrderBy(p => p.Name).Skip((pageNumber - 1) * pageSize).Take(pageSize).Select(p => new ProductResponse(p)).ToListAsync();
+                //var query = context.Products.AsQueryable();
+                var category = query.GetCategory();
+                var productsQuery = context.Products.AsQueryable();
 
-                PagedResponse<ProductResponse> results = new PagedResponse<ProductResponse>(items, totalCount, pageSize, pageNumber, totalPages);
+                if (category is not null)
+                    productsQuery = productsQuery.Where(p => p.Category == category);
+
+                if (query.MinPrice.HasValue)
+                    productsQuery = productsQuery.Where(p => p.Price >= query.MinPrice.Value);
+
+                if (query.MaxPrice.HasValue)
+                    productsQuery = productsQuery.Where(p => p.Price <= query.MaxPrice.Value);
+                
+                int totalCount = await productsQuery.CountAsync();
+                
+                var items = await productsQuery.OrderBy(p => p.Name).Skip((validatedPageNumber - 1) * validatedPageSize).Take(validatedPageSize).Select(p => new ProductResponse(p)).ToListAsync();
+
+                PagedResponse<ProductResponse> results = new PagedResponse<ProductResponse>(items,new PageMetadata(totalCount, validatedPageSize, validatedPageNumber));
                 
                 return Results.Ok(results);
             });
