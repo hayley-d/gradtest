@@ -1,3 +1,4 @@
+using GradTest.Endpoints.products.GetProductByID;
 using GradTest.Models;
 using GradTest.Persistence;
 
@@ -15,9 +16,9 @@ public static class  GetProductById
                     return Results.NotFound();
                 }
 
-                return Results.Ok(new ProductResponse(product));
+                return Results.Ok(new GetProductByIdResponse(product));
             }).WithName("GetProductById")
-            .Produces<ProductResponse>(StatusCodes.Status200OK)
+            .Produces<GetProductByIdResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound);
     }
 }
