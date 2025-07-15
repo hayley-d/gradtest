@@ -15,6 +15,4 @@ public sealed class Category: SmartEnum<Category>
         this.Price = price;
         this.InStock = inStock;
     }
-
-    
 }
