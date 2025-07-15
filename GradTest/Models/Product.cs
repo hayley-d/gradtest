@@ -35,7 +35,7 @@ public class Product
     {
         this.Id = Guid.NewGuid();
         this.Name = req.Name;
-        this.CategoryValue = req.Category;
+        this.CategoryValue = req.Category.Value;
         this.Description = req.Description;
         this.Price = req.Price;
         this.StockQuantity = req.StockQuantity;
