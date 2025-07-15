@@ -2,16 +2,15 @@ namespace GradTest.Models;
 
 public class PageMetadata
 {
-    public int TotalCount { private get; set; }
-    public int PageSize { private get; set; }
-    public int PageNumber { private get; set; }
-    public int TotalPages { private get; set; }
+    public int TotalCount { get; init; }
+    public int PageSize { get; init; }
+    public int PageNumber { get; init; }
+    public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 
-    public PageMetadata(int totalCount, int pageSize, int pageNumber, int totalPages)
+    public PageMetadata(int totalCount, int pageSize, int pageNumber)
     {
         TotalCount = totalCount;
         PageSize = pageSize;
         PageNumber = pageNumber;
-        TotalPages = totalPages;
     }
 }

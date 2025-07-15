@@ -2,12 +2,12 @@ namespace GradTest.Models;
 
 public class PagedResponse<T>
 {
-    public IEnumerable<T> Products { private get; set; }
-    public PageMetadata Metadata { private get; set; }
+    public IEnumerable<T> Products { get; init; }
+    public PageMetadata Metadata { get; init; }
 
-    public PagedResponse(IEnumerable<T> products, int totalCount, int pageSize, int pageNumber, int totalPages)
+    public PagedResponse(IEnumerable<T> products, PageMetadata metadata)
     {
-        Products = products;
-        Metadata = new PageMetadata(totalCount,pageSize,pageNumber, totalPages);
+        Products = products ?? throw new ArgumentNullException(nameof(products));
+        Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
     }
 }
