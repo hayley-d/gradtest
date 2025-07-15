@@ -27,7 +27,7 @@ public static class CreateProduct
                 Product newProduct = new Product(req);
                 await context.Products.AddAsync(newProduct);
                 await context.SaveChangesAsync();
-                return Results.Created($"/product/{newProduct.Id}", new ProductResponse(newProduct));
+                return Results.Created($"/product/{newProduct.Id}", new CreateProductResponse(newProduct));
             });
     } 
 }
