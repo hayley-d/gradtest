@@ -6,6 +6,8 @@ public class ExchangeRate
     public decimal USD { get; init; }
     public decimal ZAR { get; init; }
     public DateTime Date { get; init; }
+    
+    public ExchangeRate(){}
 
     public ExchangeRate(decimal zar)
     {

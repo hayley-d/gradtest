@@ -8,6 +8,7 @@ namespace GradTest.Endpoints;
 
 public static class ProductEndpoint
 {
+    // works
     public static void GetProductById(this IEndpointRouteBuilder builder)
     {
         // Gets a single product using the product ID
@@ -22,6 +23,7 @@ public static class ProductEndpoint
         });
     }
 
+    // works
     public static void ListProducts(this IEndpointRouteBuilder builder)
     {
         builder.MapGet("/products",
@@ -30,12 +32,11 @@ public static class ProductEndpoint
                 int validatedPageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
                 int validatedPageSize = (query.PageSize < 1 || query.PageSize > 100) ? 10 : query.PageSize;
 
-                //var query = context.Products.AsQueryable();
                 var category = query.GetCategory();
                 var productsQuery = context.Products.AsQueryable();
 
                 if (category is not null)
-                    productsQuery = productsQuery.Where(p => p.Category == category);
+                    productsQuery = productsQuery.Where(p => p.CategoryValue == category.Value);
 
                 if (query.MinPrice.HasValue)
                     productsQuery = productsQuery.Where(p => p.Price >= query.MinPrice.Value);
@@ -54,6 +55,7 @@ public static class ProductEndpoint
     }
 
     // Creates a new product
+    // works
     public static void CreateProduct(this IEndpointRouteBuilder builder)
     {
         builder.MapPost("/products",
@@ -79,6 +81,7 @@ public static class ProductEndpoint
     }
 
     // Updates the product using the product ID and DTO
+    // works
     public static void UpdateProduct(this IEndpointRouteBuilder builder)
     {
         builder.MapPatch("/products/{id}", async (ApplicationDbContext context, ProductRequest req, Guid id) =>

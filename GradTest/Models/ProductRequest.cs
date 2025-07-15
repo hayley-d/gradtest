@@ -1,30 +1,42 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace GradTest.Models;
 
-public class ProductRequest
+public class ProductRequest : IValidatableObject
 {
     [SwaggerSchema("The name of the product.", Nullable = false)]
     [Required]
     [StringLength(100)]
-    public required string Name { get; set; }
+    public string Name { get; set; }
     [SwaggerSchema("The description of the product.", Nullable = false)]
     [Required]
     [StringLength(350)]
-    public required string Description { get; set; }
+    public string Description { get; set; }
     [Required]
-    [Range(0, 3)]
-    public required int CategoryValue { get; set; }
+    [Range(0, 3, ErrorMessage = "CategoryValue must be between 0 and 3.")]
+    public int CategoryValue { get; set; }
     [SwaggerSchema("The price (in Rands) must be positive.", Nullable = false)]
     [Required]
-    [Range(0, Double.MaxValue)]
+    [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number.")]
     public required decimal Price { get; set; }
     [SwaggerSchema("The stock quantity must be positive.", Nullable = false)]
     [Required]
-    [Range(0, Int32.MaxValue)]
+    [Range(0, int.MaxValue, ErrorMessage = "StockQuantity must be a positive number.")]
     public required int StockQuantity { get; set; }
     
-    // Derived SmartEnum from enum value
+    [JsonIgnore]
+    [SwaggerSchema(ReadOnly = true)]
     public Category Category => Category.FromValue(CategoryValue);
+    
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        if (Category.FromValue(CategoryValue) is null)
+        {
+            yield return new ValidationResult(
+                $"Invalid category value: {CategoryValue}.",
+                new[] { nameof(CategoryValue) });
+        }
+    }
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace GradTest.Models;
@@ -17,11 +18,11 @@ public class ProductQueryRequest : IValidatableObject
         [Range(0, double.MaxValue, ErrorMessage = "MaxPrice must be a positive number.")]
         public decimal? MaxPrice { get; init; }
 
-        [SwaggerSchema("Current page offset (1-based).", Nullable = false)]
+        [SwaggerSchema("Current page offset (1-based).", Nullable = true)]
         [Range(1, int.MaxValue, ErrorMessage = "PageNumber must be at least 1.")]
         public int PageNumber { get; init; } = 1;
 
-        [SwaggerSchema("Amount of items per page (1 to 100).", Nullable = false)]
+        [SwaggerSchema("Amount of items per page (1 to 100).", Nullable = true)]
         [Range(1, 100, ErrorMessage = "PageSize must be between 1 and 100.")]
         public int PageSize { get; init; } = 10;
         
