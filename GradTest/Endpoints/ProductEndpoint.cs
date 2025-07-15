@@ -8,20 +8,7 @@ namespace GradTest.Endpoints;
 
 public static class ProductEndpoint
 {
-    // works
-    public static void GetProductById(this IEndpointRouteBuilder builder)
-    {
-        // Gets a single product using the product ID
-        builder.MapGet("/products/{id}", async (ApplicationDbContext context, Guid id) =>
-        {
-            var product = await context.Products.FindAsync(id);
-            if (product is null)
-            {
-                return Results.NotFound();
-            }
-            return Results.Ok(new ProductResponse(product));
-        });
-    }
+    
 
     // works
     public static void ListProducts(this IEndpointRouteBuilder builder)
