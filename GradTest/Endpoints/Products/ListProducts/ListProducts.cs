@@ -2,14 +2,14 @@ using GradTest.Models;
 using GradTest.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace GradTest.Endpoints.products;
+namespace GradTest.Endpoints.Products.ListProducts;
 
 public static class ListProducts
 {
     public static void MapListProducts(this IEndpointRouteBuilder builder)
     {
             builder.MapGet("/products",
-                async (ApplicationDbContext context, [AsParameters] ProductQueryRequest query) =>
+                async (ApplicationDbContext context, [AsParameters] ListProductRequest query) =>
                 {
                     int validatedPageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
                     int validatedPageSize = (query.PageSize < 1 || query.PageSize > 100) ? 10 : query.PageSize;
@@ -28,9 +28,9 @@ public static class ListProducts
                 
                     int totalCount = await productsQuery.CountAsync();
                 
-                    var items = await productsQuery.OrderBy(p => p.Name).Skip((validatedPageNumber - 1) * validatedPageSize).Take(validatedPageSize).Select(p => new ProductResponse(p)).ToListAsync();
+                    var items = await productsQuery.OrderBy(p => p.Name).Skip((validatedPageNumber - 1) * validatedPageSize).Take(validatedPageSize).Select(p => new ListProductsProductResponse(p)).ToListAsync();
 
-                    PagedResponse<ProductResponse> results = new PagedResponse<ProductResponse>(items,new PageMetadata(totalCount, validatedPageSize, validatedPageNumber));
+                    ListProductsResponse<ListProductsProductResponse> results = new ListProductsResponse<ListProductsProductResponse>(items,new ListProductsPageMetadata(totalCount, validatedPageSize, validatedPageNumber));
                 
                     return Results.Ok(results);
                 });

@@ -5,16 +5,28 @@ namespace GradTest.Models;
 
 public class Product
 {
+    [Required]
     public Guid Id { get; init; }
+    
     [Required]
     [StringLength(100)]
-    public string Name { get; set; }
+    public required string Name { get; set; }
+    
     [Required]
     [StringLength(350)]
-    public string Description { get; set; }
+    public required string Description { get; set; }
+    
     [Required]
-    [Range(0, 3)]
+    [Range(1, 3)]
     public int CategoryValue { get; set; }
+    
+    [Required]
+    [Range(0, Double.MaxValue)]
+    public decimal Price { get; set; }
+    
+    [Required]
+    [Range(0, Int32.MaxValue)]
+    public int StockQuantity { get; set; }
     
     [NotMapped]
     public Category Category
@@ -22,22 +34,9 @@ public class Product
         get => Models.Category.FromValue(CategoryValue);
         set => CategoryValue = value.Value;
     }
-    [Required]
-    [Range(0, Double.MaxValue)]
-    public decimal Price { get; set; }
-    [Required]
-    [Range(0, Int32.MaxValue)]
-    public int StockQuantity { get; set; }
-    
-    public Product() {}
-    
-    public Product(ProductRequest req)
+
+    public Product()
     {
-        this.Id = Guid.NewGuid();
-        this.Name = req.Name;
-        this.CategoryValue = req.Category.Value;
-        this.Description = req.Description;
-        this.Price = req.Price;
-        this.StockQuantity = req.StockQuantity;
+        Id = Guid.NewGuid();
     }
 }

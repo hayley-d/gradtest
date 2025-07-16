@@ -1,8 +1,7 @@
-using GradTest.Endpoints.products.GetProductByID;
 using GradTest.Models;
 using GradTest.Persistence;
 
-namespace GradTest.Endpoints.products;
+namespace GradTest.Endpoints.Products.GetProductByID;
 
 public static class  GetProductById
 {

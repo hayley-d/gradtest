@@ -1,19 +1,33 @@
 using System.ComponentModel.DataAnnotations;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace GradTest.Models;
 
 public class OrderProduct
 {
+    [Key]
+    [SwaggerSchema("The unique identifier for the order-product mapping.")]
+    public Guid Id { get; init; } = Guid.NewGuid();
+    
     [Required]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    [SwaggerSchema("The ID of the product being ordered.", Nullable = false)]
+    public required Guid ProductId { get; init; }
+    
     [Required]
-    public Guid ProductId { get; set; }
+    [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
+    [SwaggerSchema("The number of units of the product in the order. Must be at least 1.", Nullable = false)]
+    public int Quantity { get; init; }
+    
     [Required]
-    public int Quantity { get; set; }
-    public Product? Product { get; set; }
+    [SwaggerSchema("The actual product entity reference.", ReadOnly = true)]
+    public required Product Product { get; init; }
 
-    public OrderProduct(Guid productId, int quantity = 1)
+    public OrderProduct(Guid productId, Product product, int quantity = 1)
     {
-        
+        ProductId = productId;
+        Quantity = quantity;
+        Product = product;
     }
+    
+    public OrderProduct() {}
 }

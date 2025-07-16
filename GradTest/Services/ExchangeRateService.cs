@@ -1,4 +1,5 @@
 using GradTest.Models;
+using GradTest.Utils;
 
 namespace GradTest.Services;
 
@@ -26,7 +27,7 @@ public class ExchangeRateService: IExchangeRateService
    {
       try
       {
-         var apiKey = _config["OpenExchangeRates:ApiKey"];
+         string apiKey = ConnectionStrings.GetApiKey();
 
          if (string.IsNullOrWhiteSpace(apiKey))
          {
@@ -34,7 +35,7 @@ public class ExchangeRateService: IExchangeRateService
             return null;
          }
 
-         var url = $"https://openexchangerates.org/api/latest.json?app_id={apiKey}&symbols=ZAR,USD";
+         var url = $"https://api.fastforex.io/fetch-one?from=USD&to=ZAR&api_key={apiKey}";
 
          var httpResponse = await _client.GetAsync(url);
 
