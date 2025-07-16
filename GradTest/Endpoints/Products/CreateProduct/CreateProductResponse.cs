@@ -1,8 +1,9 @@
+using GradTest.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace GradTest.Models;
+namespace GradTest.Endpoints.Products.CreateProduct;
 
-public class ProductResponse
+public class CreateProductResponse
 {
     [SwaggerSchema("The unique identifier of the product.")]
     public Guid Id { get; init; }
@@ -17,7 +18,7 @@ public class ProductResponse
     [SwaggerSchema("The current stock quantity of the product.")]
     public int StockQuantity { get; init; }
 
-    public ProductResponse(Guid id, string name, string description, Category category, decimal price,
+    public CreateProductResponse(Guid id, string name, string description, Category category, decimal price,
         int stockQuantity)
     {
         Id = id;
@@ -28,7 +29,7 @@ public class ProductResponse
         StockQuantity = stockQuantity;
     }
 
-    public ProductResponse(Product product)
+    public CreateProductResponse(Product product)
     {
         Id = product.Id;
         Name = product.Name;

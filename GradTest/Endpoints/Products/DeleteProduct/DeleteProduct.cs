@@ -1,7 +1,7 @@
 using GradTest.Models;
 using GradTest.Persistence;
 
-namespace GradTest.Endpoints.products;
+namespace GradTest.Endpoints.Products.DeleteProduct;
 
 public static class DeleteProduct
 {

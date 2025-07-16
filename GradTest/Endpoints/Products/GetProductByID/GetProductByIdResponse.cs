@@ -1,7 +1,7 @@
 using GradTest.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace GradTest.Endpoints.products.GetProductByID;
+namespace GradTest.Endpoints.Products.GetProductByID;
 
 public class GetProductByIdResponse
 {

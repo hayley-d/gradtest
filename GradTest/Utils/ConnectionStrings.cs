@@ -14,5 +14,16 @@ public static class ConnectionStrings
           throw new InvalidOperationException("Missing required environment variables: POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD");  
 
       return $"Host=localhost;Database={db};Username={user};Password={password}";
-   } 
+   }
+
+   public static string GetApiKey()
+   {
+       DotNetEnv.Env.Load();
+       string apiKey = Environment.GetEnvironmentVariable("OPEN_EX_APIKEY") ?? throw new InvalidOperationException("Missing required environment variable: OPEN_EX_APIKEY");
+
+       if (string.IsNullOrWhiteSpace(apiKey)) 
+           throw new InvalidOperationException("Missing required environment variable: OPEN_EX_APIKEY");
+
+       return apiKey;
+   }
 }

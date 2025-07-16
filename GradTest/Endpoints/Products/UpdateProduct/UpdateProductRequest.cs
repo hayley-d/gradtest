@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using GradTest.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace GradTest.Models;
+namespace GradTest.Endpoints.Products.UpdateProduct;
 
-public class ProductRequest : IValidatableObject
+public class UpdateProductRequest
 {
     [SwaggerSchema("The name of the product.", Nullable = false)]
     [Required]

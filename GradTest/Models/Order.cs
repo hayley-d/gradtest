@@ -4,13 +4,30 @@ namespace GradTest.Models;
 
 public class Order
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public required string UserId { get; set; } 
-    public DateTime OrderDate { get; set; } = DateTime.UtcNow;
-    public List<OrderProduct> Products { get; set; } = new();
+    [Key]
+    public Guid Id { get; init; } = Guid.NewGuid();
+    
+    [Required]
+    [MaxLength(250)]
+    public required string UserId { get; init; } 
+    
+    [Required]
+    public DateTime OrderDate { get; init; } = DateTime.UtcNow;
+    
+    [Required]
+    [MinLength(1, ErrorMessage = "At least one product is required.")]
+    public List<OrderProduct> Products { get; set; } 
+    
+    [Required]
+    [Range(0.0001, double.MaxValue, ErrorMessage = "Exchange rate must be a positive number.")]
+    public required decimal ZarToUsd { get; init; }
 
-    public decimal GetCurrentExchangeRate()
+    public Order(string userId, List<OrderProduct> products, decimal zar)
     {
-        return 1;
+        UserId = userId;
+        Products = products;
+        ZarToUsd = zar;
     }
+    
+    public Order() {}
 }

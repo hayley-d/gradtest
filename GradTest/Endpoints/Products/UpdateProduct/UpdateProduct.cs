@@ -1,13 +1,13 @@
 using GradTest.Models;
 using GradTest.Persistence;
 
-namespace GradTest.Endpoints.products;
+namespace GradTest.Endpoints.Products.UpdateProduct;
 
 public static class UpdateProduct
 {
     public static void MapUpdateProduct(this IEndpointRouteBuilder builder)
     {
-        builder.MapPatch("/products/{id}", async (ApplicationDbContext context, ProductRequest req, Guid id) =>
+        builder.MapPatch("/products/{id}", async (ApplicationDbContext context, UpdateProductRequest req, Guid id) =>
         {
             Product? product = await context.Products.FindAsync(id);
             if (product is null)

@@ -1,4 +1,4 @@
-using GradTest.Endpoints.products;
+using GradTest.Endpoints.Products;
 
 namespace GradTest.Endpoints;
 

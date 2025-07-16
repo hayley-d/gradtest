@@ -5,6 +5,7 @@ using GradTest.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.SetupAuthentication();
 builder.SetupServices();
 builder.SetupEntityFramework();
 builder.SetupLogging();
@@ -16,9 +17,14 @@ app.MapEndpoints();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.OAuthClientId(builder.Configuration["OIDC:ClientId"]);
+        options.OAuthUsePkce(); 
+    });
 }
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => Results.Redirect("/swagger"));
+
 
 app.Run();
