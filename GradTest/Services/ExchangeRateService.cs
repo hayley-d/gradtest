@@ -15,8 +15,6 @@ public class ExchangeRateService: IExchangeRateService
       public decimal Rate { get; set; }
    }
    
-
-   
    private readonly HttpClient _client;
    private readonly IConfiguration? _config;
    private readonly ILogger<ExchangeRateService> _logger;
@@ -28,11 +26,6 @@ public class ExchangeRateService: IExchangeRateService
       _logger = logger;
    }
 
-   public ExchangeRate? GetExchangeRate()
-   {
-     return GetExchangeRateAsync().GetAwaiter().GetResult(); 
-   }
-
    public async Task<ExchangeRate?> GetExchangeRateAsync()
    {
       try
@@ -42,6 +35,7 @@ public class ExchangeRateService: IExchangeRateService
          if (string.IsNullOrWhiteSpace(apiKey))
          {
             _logger.LogError("API key for Open Exchange Rates not found.");
+            
             return null;
          }
 
@@ -52,6 +46,7 @@ public class ExchangeRateService: IExchangeRateService
          if (!httpResponse.IsSuccessStatusCode)
          {
             _logger.LogError($"Failed to fetch exchange rates: {httpResponse.StatusCode}");
+            
             return null;
          }
 
@@ -61,12 +56,10 @@ public class ExchangeRateService: IExchangeRateService
          
          var response = await httpResponse.Content.ReadFromJsonAsync<OpenExchangeResponse>();
 
-
-         //var response = await httpResponse.Content.ReadFromJsonAsync<OpenExchangeResponse>();
-
          if (response is null || !response.Result.TryGetValue("ZAR", out var zar))
          {
             _logger.LogError("Failed to find ZAR in exchange rate response.");
+            
             return null;
          }
 
@@ -75,11 +68,13 @@ public class ExchangeRateService: IExchangeRateService
       catch (HttpRequestException ex)
       {
          _logger.LogError($"Network error while fetching exchange rates: {ex.Message}");
+         
          return null;
       }
       catch (Exception ex)
       {
          _logger.LogError($"Unexpected error while fetching exchange rates: {ex.Message}");
+         
          return null;
       }
    }

@@ -17,14 +17,17 @@ public static class GetOrdersByUser
                 return Results.Unauthorized();
             } 
             
-            string? userId = await AuthenticationMiddleware.GetUserID(httpContext);
+            var userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
             if (string.IsNullOrEmpty(userId))
             {
                 return Results.Unauthorized();
             }
             
-            var response = await context.Orders.Where(o => o.UserId == userId).Select(o => new GetOrdersByUserResponse(o)).ToListAsync();
+            var response = await context.Orders
+                .Where(o => o.UserId == userId)
+                .Select(o => new GetOrdersByUserResponse(o))
+                .ToListAsync();
 
             return Results.Ok(response);
         }).WithDescription("Gets all orders by user.");
