@@ -9,18 +9,28 @@ public class ExchangeRateService: IExchangeRateService
 {
    private class OpenExchangeResponse
    {
-      public Dictionary<string, decimal> Rates { get; set; }
+      public string Base { get; set; } = "";
+      public Dictionary<string, decimal> Result { get; set; } = new();
+      public string Updated { get; set; } = "";
+      public decimal Rate { get; set; }
    }
    
+
+   
    private readonly HttpClient _client;
-   private readonly IConfiguration _config;
+   private readonly IConfiguration? _config;
    private readonly ILogger<ExchangeRateService> _logger;
 
-   public ExchangeRateService(HttpClient client, IConfiguration config, ILogger<ExchangeRateService> logger)
+   public ExchangeRateService(HttpClient client, ILogger<ExchangeRateService> logger, IConfiguration? config = null)
    {
       _client = client;
       _config = config;
       _logger = logger;
+   }
+
+   public ExchangeRate? GetExchangeRate()
+   {
+     return GetExchangeRateAsync().GetAwaiter().GetResult(); 
    }
 
    public async Task<ExchangeRate?> GetExchangeRateAsync()
@@ -45,11 +55,18 @@ public class ExchangeRateService: IExchangeRateService
             return null;
          }
 
+         var rawJson = await httpResponse.Content.ReadAsStringAsync();
+         
+         _logger.LogInformation("Raw exchange rate JSON: " + rawJson);
+         
          var response = await httpResponse.Content.ReadFromJsonAsync<OpenExchangeResponse>();
 
-         if (response is null || !response.Rates.TryGetValue("ZAR", out var zar))
+
+         //var response = await httpResponse.Content.ReadFromJsonAsync<OpenExchangeResponse>();
+
+         if (response is null || !response.Result.TryGetValue("ZAR", out var zar))
          {
-            _logger.LogError($"Response if missing ZAR rate.");
+            _logger.LogError("Failed to find ZAR in exchange rate response.");
             return null;
          }
 

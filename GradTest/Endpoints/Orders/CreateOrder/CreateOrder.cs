@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using GradTest.Services;
 using GradTest.Models;
 using GradTest.Persistence;
 using GradTest.Utils;
@@ -11,7 +12,7 @@ public static class CreateOrder
 {
     public static void MapCreateOrder(this IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/orders", async (HttpContext httpContext,ApplicationDbContext context, [FromBody] CreateOrderRequest req) =>
+        builder.MapPost("/orders", async (HttpContext httpContext,ApplicationDbContext context, [FromBody] CreateOrderRequest req, IExchangeRateService exchangeRateService) =>
         {
             await AuthenticationMiddleware.UserAuthorize(httpContext);
                     
@@ -42,6 +43,26 @@ public static class CreateOrder
                 return Results.ValidationProblem(errors);
             }
             
+            decimal latestRate = await context.ExchangeRates
+                .OrderByDescending(r => r.Date)
+                .Select(r => r.ZAR)
+                .FirstOrDefaultAsync();
+
+            if (latestRate == 0)
+            {
+                var liveRate = await exchangeRateService.GetExchangeRateAsync();
+                if (liveRate is not null)
+                {
+                    context.ExchangeRates.Add(liveRate);
+                    await context.SaveChangesAsync();
+                    latestRate = liveRate.ZAR;
+                }
+                else
+                {
+                    return Results.BadRequest("Exchange rate not available.");
+                } 
+            }
+            
             foreach (var product in req.Products)
             {
                 try
@@ -59,9 +80,9 @@ public static class CreateOrder
                     else
                     {
                         dbProduct.StockQuantity -= product.Quantity;
-                        //context.Products.Update(dbProduct);
+                        context.Products.Update(dbProduct);
+                        await context.SaveChangesAsync();
                     }
-                    await context.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {
@@ -70,16 +91,6 @@ public static class CreateOrder
                 
             }
             
-            decimal latestRate = await context.ExchangeRates
-                .OrderByDescending(r => r.Date)
-                .Select(r => r.ZAR)
-                .FirstOrDefaultAsync();
-
-            /*if (latestRate == 0)
-            {
-                return Results.BadRequest("Exchange rate not available.");
-            }*/
-
             List<OrderProduct> products = new List<OrderProduct>();
             
             foreach (var product in req.Products)

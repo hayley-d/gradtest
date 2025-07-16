@@ -7,16 +7,13 @@ using Hangfire;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.SetupAuthentication();
-builder.SetupServices();
 builder.SetupEntityFramework();
 builder.SetupLogging();
+builder.SetupServices();
 
 var app = builder.Build();
-app.SetupJobs();
-
 
 //app.UseMiddleware<AuthenticationMiddleware>();
-
 app.AddSwaggerDoc(builder);
 app.UseHttpsRedirection();
 
@@ -29,6 +26,12 @@ if (app.Environment.IsDevelopment())
         options.OAuthUsePkce(); 
     });
 }
+
+app.UseHangfireDashboard();
+app.UseHangfireServer();  
+
+app.SetupJobs();
+
 app.MapEndpoints();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));

@@ -1,3 +1,4 @@
+using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;
 
@@ -9,11 +10,10 @@ public static class JobConfiguration
     {
         var jobManager = app.ApplicationServices.GetRequiredService<IRecurringJobManager>();
 
-        RecurringJob.AddOrUpdate<IExchangeRateSyncJob>(
+        jobManager.AddOrUpdate<IExchangeRateSyncJob>(
             "sync-exchange-rate",
             job => job.SyncAndStoreAsync(),
             "0 */2 * * *"
         );
-        
     }  
 }

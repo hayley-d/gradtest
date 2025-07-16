@@ -26,15 +26,15 @@ public static class ServiceConfiguration
         
         builder.Services.AddEndpointsApiExplorer();
         
+        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
+        
+        builder.Services.AddHangfireServer();
+        
         builder.Services.AddSwaggerGen(x =>
         {
             x.EnableAnnotations();
             x.SchemaFilter<SmartEnumSchemaFilter<Category>>();
         });
-        
-        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
-        
-        builder.Services.AddHangfireServer();
         
         SetupSwaggerDoc(builder);
     }  
