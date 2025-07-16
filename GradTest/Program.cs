@@ -13,6 +13,8 @@ builder.SetupLogging();
 var app = builder.Build();
 app.SetupJobs();
 
+//app.UseMiddleware<AuthenticationMiddleware>();
+
 app.AddSwaggerDoc(builder);
 app.UseHttpsRedirection();
 
@@ -28,6 +30,7 @@ if (app.Environment.IsDevelopment())
 app.MapEndpoints();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
+
 app.UseCors("Application");
 
 app.Run();
