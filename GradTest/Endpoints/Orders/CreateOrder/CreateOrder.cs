@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
+using GradTest.Services;
 using GradTest.Models;
 using GradTest.Persistence;
+using GradTest.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +12,16 @@ public static class CreateOrder
 {
     public static void MapCreateOrder(this IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/orders", async (HttpContext httpContext,ApplicationDbContext context, [FromBody] CreateOrderRequest req) =>
+        builder.MapPost("/orders", async (HttpContext httpContext,ApplicationDbContext context, [FromBody] CreateOrderRequest req, IExchangeRateService exchangeRateService) =>
         {
-            string? userId = httpContext.User.FindFirst("sub")?.Value;
+            await AuthenticationMiddleware.UserAuthorize(httpContext);
+                    
+            if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            {
+                return Results.Unauthorized();
+            } 
+            
+            string? userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
             if (string.IsNullOrEmpty(userId))
             {
@@ -20,7 +29,9 @@ public static class CreateOrder
             }
             
             var validationResults = new List<ValidationResult>();
+            
             var validationContext = new ValidationContext(req);
+            
             if (!Validator.TryValidateObject(req, validationContext, validationResults, validateAllProperties: true))
             {
                 var errors = validationResults
@@ -31,12 +42,33 @@ public static class CreateOrder
 
                 return Results.ValidationProblem(errors);
             }
+            
+            decimal latestRate = await context.ExchangeRates
+                .OrderByDescending(r => r.Date)
+                .Select(r => r.ZAR)
+                .FirstOrDefaultAsync();
 
+            if (latestRate == 0)
+            {
+                var liveRate = await exchangeRateService.GetExchangeRateAsync();
+                if (liveRate is not null)
+                {
+                    context.ExchangeRates.Add(liveRate);
+                    await context.SaveChangesAsync();
+                    latestRate = liveRate.ZAR;
+                }
+                else
+                {
+                    return Results.BadRequest("Exchange rate not available.");
+                } 
+            }
+            
             foreach (var product in req.Products)
             {
                 try
                 {
-                    var dbProduct = context.Products.Find(product.ProductId);
+                    var dbProduct = await context.Products.FindAsync(product.ProductId);
+                    
                     if (dbProduct is null)
                     {
                         throw new Exception($"Product {product.ProductId} was not found.");
@@ -49,6 +81,7 @@ public static class CreateOrder
                     {
                         dbProduct.StockQuantity -= product.Quantity;
                         context.Products.Update(dbProduct);
+                        await context.SaveChangesAsync();
                     }
                 }
                 catch (Exception ex)
@@ -58,26 +91,25 @@ public static class CreateOrder
                 
             }
             
-            decimal latestRate = await context.ExchangeRates
-                .OrderByDescending(r => r.Date)
-                .Select(r => r.ZAR)
-                .FirstOrDefaultAsync();
-
-            if (latestRate == 0)
+            List<OrderProduct> products = new List<OrderProduct>();
+            
+            foreach (var product in req.Products)
             {
-                return Results.BadRequest("Exchange rate not available.");
+                products.Add(product.Convert());
             }
             
             Order newOrder = new Order {
                 UserId = userId,
-                Products = req.Products, 
+                Products = products,
                 ZarToUsd = latestRate,
             };
             
             await context.Orders.AddAsync(newOrder);
+            
             await context.SaveChangesAsync();
             
             return Results.Created($"/orders/{newOrder.Id}", new CreateOrderResponse(newOrder));
         });
+        
     }
 }

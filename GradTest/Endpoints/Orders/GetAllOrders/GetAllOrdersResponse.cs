@@ -22,7 +22,7 @@ public class GetAllOrdersResponse
         [SwaggerSchema("The exchange rate (ZAR to USD) at the time of order.")]
         [Range(0.0001, double.MaxValue)]
         [Required]
-        public decimal ZARToUSD { get; init; }
+        public decimal ZarToUsd { get; init; }
 
         [SwaggerSchema("The list of ordered products.")]
         [Required]
@@ -33,7 +33,7 @@ public class GetAllOrdersResponse
             Id = order.Id;
             UserId = order.UserId;
             OrderDate = order.OrderDate;
-            ZARToUSD = order.ZarToUsd;
+            ZarToUsd = order.ZarToUsd;
             Products = order.Products;
         }
     

@@ -1,0 +1,39 @@
+networks:
+  Grad-prac:
+    name: Grad-prac
+
+services:
+  
+  database:
+    image: postgres:16.3
+    environment:
+      POSTRGES_DB: prac-day
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password1
+      ACCEPT_EULA: "Y"
+    container_name: DATABASE
+    restart: unless-stopped
+    networks:
+      - Grad-prac
+    ports:
+      - "5432:5432"
+  
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    networks:
+      - Grad-prac
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://DATABASE:5432/postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: Password1
+      KC_HOSTNAME: localhost
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    container_name: KEYCLOAK
+    command: >
+      start-dev --import-realm

@@ -1,3 +1,4 @@
+using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;
 
@@ -14,6 +15,5 @@ public static class JobConfiguration
             job => job.SyncAndStoreAsync(),
             "0 */2 * * *"
         );
-        
     }  
 }

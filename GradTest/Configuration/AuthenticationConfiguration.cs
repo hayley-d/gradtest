@@ -11,7 +11,6 @@ public static class AuthenticationConfiguration
             .AddJwtBearer(options =>
                 {
                     options.Authority = builder.Configuration["OIDC:Authority"];
-                    options.MetadataAddress = builder.Configuration["OIDC:MetadataAddress"];
                     options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -22,11 +21,5 @@ public static class AuthenticationConfiguration
                     };
                 }
             );
-
-        builder.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy("AdminOnly", policy =>
-                policy.RequireRole("Admin"));
-        });
     }
 }

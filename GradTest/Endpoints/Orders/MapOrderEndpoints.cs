@@ -1,4 +1,5 @@
 using GradTest.Endpoints.Orders.CreateOrder;
+using GradTest.Endpoints.Orders.GetAllOrders;
 using GradTest.Endpoints.Orders.GetOrderByID;
 using GradTest.Endpoints.Orders.GetOrdersByUser;
 
@@ -11,5 +12,6 @@ public static class MapOrderEndpoints
         app.MapCreateOrder();
         app.MapGetOrdersByUser();
         app.MapGetOrderById();
+        app.MapGetAllOrders();
     }
 }

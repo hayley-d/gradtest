@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using GradTest.Models;
 using GradTest.Persistence;
+using GradTest.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GradTest.Endpoints.Products.CreateProduct;
@@ -9,10 +10,18 @@ public static class CreateProduct
 {
     public static void MapCreateProduct(this IEndpointRouteBuilder builder)
     {
-        builder.MapPost("/products",
-            async (ApplicationDbContext context, [FromBody] CreateProductRequest req) =>
+        builder.MapPost("/admin/products",
+            async (HttpContext httpContext, ApplicationDbContext context, [FromBody] CreateProductRequest req) =>
             {
+                await AuthenticationMiddleware.AdminAuthorize(httpContext);
+                    
+                if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                {
+                    return Results.Unauthorized();
+                } 
+                
                 var validationErrors = new List<ValidationResult>();
+                
                 var validationContext = new ValidationContext(req);
 
                 if (!Validator.TryValidateObject(req, validationContext, validationErrors))
@@ -35,7 +44,9 @@ public static class CreateProduct
                 };
                 
                 await context.Products.AddAsync(newProduct);
+                
                 await context.SaveChangesAsync();
+                
                 return Results.Created($"/product/{newProduct.Id}", new CreateProductResponse(newProduct));
             });
     } 
