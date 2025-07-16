@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using GradTest.Models;
 using GradTest.Persistence;
+using GradTest.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +13,14 @@ public static class CreateOrder
     {
         builder.MapPost("/orders", async (HttpContext httpContext,ApplicationDbContext context, [FromBody] CreateOrderRequest req) =>
         {
-            string? userId = httpContext.User.FindFirst("sub")?.Value;
+            await AuthenticationMiddleware.UserAuthorize(httpContext);
+                    
+            if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            {
+                return Results.Unauthorized();
+            } 
+            
+            string? userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
             if (string.IsNullOrEmpty(userId))
             {
@@ -20,7 +28,9 @@ public static class CreateOrder
             }
             
             var validationResults = new List<ValidationResult>();
+            
             var validationContext = new ValidationContext(req);
+            
             if (!Validator.TryValidateObject(req, validationContext, validationResults, validateAllProperties: true))
             {
                 var errors = validationResults
@@ -37,6 +47,7 @@ public static class CreateOrder
                 try
                 {
                     var dbProduct = context.Products.Find(product.ProductId);
+                    
                     if (dbProduct is null)
                     {
                         throw new Exception($"Product {product.ProductId} was not found.");
@@ -75,6 +86,7 @@ public static class CreateOrder
             };
             
             await context.Orders.AddAsync(newOrder);
+            
             await context.SaveChangesAsync();
             
             return Results.Created($"/orders/{newOrder.Id}", new CreateOrderResponse(newOrder));

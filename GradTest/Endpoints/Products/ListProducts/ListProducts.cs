@@ -14,7 +14,7 @@ public static class ListProducts
             builder.MapGet("/products",
                 async (HttpContext httpContext, ApplicationDbContext context, [AsParameters] ListProductRequest query) =>
                 {
-                    bool authorized= await AuthenticationMiddleware.UserAuthorize(httpContext);
+                    await AuthenticationMiddleware.UserAuthorize(httpContext);
                     
                     if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
                     {

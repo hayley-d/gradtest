@@ -2,11 +2,10 @@ using System.Text.Json;
 
 namespace GradTest.Utils;
 
-public class AuthenticationMiddleware : IHttpContextHandler
+public class AuthenticationMiddleware 
 {
     private readonly RequestDelegate _next;
-    public bool IsReusable { get; } = true;
-
+    
     public AuthenticationMiddleware(RequestDelegate next)
     {
         _next = next;
@@ -17,12 +16,13 @@ public class AuthenticationMiddleware : IHttpContextHandler
         var authorized = httpContext.Request.Path.StartsWithSegments("/admin")
             ? await AdminAuthorize(httpContext)
             : await UserAuthorize(httpContext);
+        
         if (!authorized)
         {
             httpContext.Response.StatusCode = 401;
             await httpContext.Response.WriteAsync($"Unauthorized: This endpoint is for admin users only.");
         } 
-        // Passes to next middleware
+        
         await _next(httpContext);
     }
 
@@ -86,7 +86,7 @@ public class AuthenticationMiddleware : IHttpContextHandler
                     foreach (var role in roleElement.EnumerateArray())
                     {
                         var roleName = role.GetString();
-                        if (roleName is not null && roleName.Equals("grad-admin"))
+                        if (roleName is not null && (roleName.Equals("grad-user") || roleName.Equals("grad-admin")))
                         {
                             authorized = true;
                         }
@@ -103,9 +103,4 @@ public class AuthenticationMiddleware : IHttpContextHandler
             return authorized;
     }
     
-    public void ProcessRequest(HttpContext context)
-    {
-        // TODO: Auth logic 
-        
-    }
 }
