@@ -25,10 +25,7 @@ public static class GetOrderById
                 return Results.Unauthorized();
             }
 
-            var order = await context.Orders
-                .Include(o => o.Products)
-                .ThenInclude(p => p.Product)
-                .FirstOrDefaultAsync(o => o.Id == id);
+            var order = await context.Orders.FirstOrDefaultAsync(o => o.Id == id);
 
             if (order is null)
                 return Results.NotFound();
@@ -37,6 +34,6 @@ public static class GetOrderById
                 return Results.Forbid();
 
             return Results.Ok(new GetOrderByIdResponse(order));
-        });
+        }).WithDescription("Gets an order by order ID.");
     } 
 }

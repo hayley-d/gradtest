@@ -24,15 +24,9 @@ public static class GetOrdersByUser
                 return Results.Unauthorized();
             }
             
-            var orders = await context.Orders
-                .Where(o => o.UserId == userId)
-                .Include(o => o.Products)
-                .ThenInclude(p => p.Product)
-                .ToListAsync();
-
-            var response = orders.Select(o => new GetOrdersByUserResponse(o)).ToList();
+            var response = await context.Orders.Where(o => o.UserId == userId).Select(o => new GetOrdersByUserResponse(o)).ToListAsync();
 
             return Results.Ok(response);
-        });
+        }).WithDescription("Gets all orders by user.");
     }
 }

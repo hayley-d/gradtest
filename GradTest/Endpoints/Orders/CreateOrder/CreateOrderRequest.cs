@@ -9,7 +9,7 @@ public class CreateOrderRequest : IValidatableObject
 {
     [SwaggerSchema("The list of products to order, with quantity.", Nullable = false)]
     [Required]
-    public required List<OrderProduct> Products { get; init; }
+    public required List<OrderProductRequest> Products { get; init; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -48,4 +48,32 @@ public class CreateOrderRequest : IValidatableObject
 
         
     }
+}
+
+public class OrderProductRequest
+{
+        [Required]
+        [SwaggerSchema("The ID of the product being ordered.", Nullable = false)]
+        public required Guid ProductId { get; init; }
+    
+        [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1.")]
+        [SwaggerSchema("The number of units of the product in the order. Must be at least 1.", Nullable = false)]
+        public int Quantity { get; init; }
+    
+        public OrderProductRequest(Guid productId, int quantity = 1)
+        {
+            ProductId = productId;
+            Quantity = quantity;
+        }
+
+        public OrderProductRequest() {}
+
+        public OrderProduct Convert()
+        {
+            return new OrderProduct {
+                ProductId = ProductId, 
+                Quantity =  Quantity,
+            };
+        }
 }

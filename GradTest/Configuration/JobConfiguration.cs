@@ -9,7 +9,7 @@ public static class JobConfiguration
     {
         var jobManager = app.ApplicationServices.GetRequiredService<IRecurringJobManager>();
 
-        jobManager.AddOrUpdate<IExchangeRateSyncJob>(
+        RecurringJob.AddOrUpdate<IExchangeRateSyncJob>(
             "sync-exchange-rate",
             job => job.SyncAndStoreAsync(),
             "0 */2 * * *"

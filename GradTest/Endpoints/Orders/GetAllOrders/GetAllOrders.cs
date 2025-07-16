@@ -18,14 +18,9 @@ public static class GetAllOrders
                 return Results.Unauthorized();
             } 
             
-            var orders = await context.Orders
-                .Include(o => o.Products)
-                .ThenInclude(p => p.Product)
-                .ToListAsync();
-
-            var response = orders.Select(o => new GetAllOrdersResponse(o)).ToList();
+            var response = await context.Orders.Select(o => new GetAllOrdersResponse(o)).ToListAsync();
             
             return Results.Ok(response); 
-        });
+        }).WithDescription("Gets all orders on the system.");
     }
 }

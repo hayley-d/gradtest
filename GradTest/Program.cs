@@ -2,6 +2,7 @@ using GradTest.Configuration;
 using GradTest.Endpoints;
 using GradTest.Models;
 using GradTest.Utils;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.SetupLogging();
 
 var app = builder.Build();
 app.SetupJobs();
+
 
 //app.UseMiddleware<AuthenticationMiddleware>();
 

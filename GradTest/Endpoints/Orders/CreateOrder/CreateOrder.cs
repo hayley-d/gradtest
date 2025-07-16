@@ -41,12 +41,12 @@ public static class CreateOrder
 
                 return Results.ValidationProblem(errors);
             }
-
+            
             foreach (var product in req.Products)
             {
                 try
                 {
-                    var dbProduct = context.Products.Find(product.ProductId);
+                    var dbProduct = await context.Products.FindAsync(product.ProductId);
                     
                     if (dbProduct is null)
                     {
@@ -75,14 +75,21 @@ public static class CreateOrder
                 .Select(r => r.ZAR)
                 .FirstOrDefaultAsync();
 
-            if (latestRate == 0)
+            /*if (latestRate == 0)
             {
                 return Results.BadRequest("Exchange rate not available.");
+            }*/
+
+            List<OrderProduct> products = new List<OrderProduct>();
+            
+            foreach (var product in req.Products)
+            {
+                products.Add(product.Convert());
             }
             
             Order newOrder = new Order {
                 UserId = userId,
-                Products = req.Products, 
+                Products = products,
                 ZarToUsd = latestRate,
             };
             
@@ -92,5 +99,6 @@ public static class CreateOrder
             
             return Results.Created($"/orders/{newOrder.Id}", new CreateOrderResponse(newOrder));
         });
+        
     }
 }

@@ -16,7 +16,7 @@ public class Order
     
     [Required]
     [MinLength(1, ErrorMessage = "At least one product is required.")]
-    public List<OrderProduct> Products { get; set; } 
+    public List<OrderProduct> Products { get; init; } 
     
     [Required]
     [Range(0.0001, double.MaxValue, ErrorMessage = "Exchange rate must be a positive number.")]
