@@ -30,6 +30,7 @@ public static class UpdateProduct
             product.StockQuantity = req.StockQuantity;
             
             await context.SaveChangesAsync();
+            
             return Results.Ok();
         });
     }

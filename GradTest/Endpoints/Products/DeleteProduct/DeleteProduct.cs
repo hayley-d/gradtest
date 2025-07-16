@@ -18,12 +18,16 @@ public static class DeleteProduct
             } 
             
             Product? product = await context.Products.FindAsync(id);
+            
             if (product is null)
             {
                 return Results.NotFound();
             }
+            
             context.Products.Remove(product);
+            
             await context.SaveChangesAsync();
+            
             return Results.Ok();
         });
     }

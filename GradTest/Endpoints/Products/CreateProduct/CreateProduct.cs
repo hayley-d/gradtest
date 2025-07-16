@@ -21,6 +21,7 @@ public static class CreateProduct
                 } 
                 
                 var validationErrors = new List<ValidationResult>();
+                
                 var validationContext = new ValidationContext(req);
 
                 if (!Validator.TryValidateObject(req, validationContext, validationErrors))
@@ -43,7 +44,9 @@ public static class CreateProduct
                 };
                 
                 await context.Products.AddAsync(newProduct);
+                
                 await context.SaveChangesAsync();
+                
                 return Results.Created($"/product/{newProduct.Id}", new CreateProductResponse(newProduct));
             });
     } 

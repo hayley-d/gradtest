@@ -9,23 +9,22 @@ public static class  GetProductById
     public static void MapGetProductById(this IEndpointRouteBuilder builder)
     {
         builder.MapGet("/products/{id}", async (HttpContext httpContext, ApplicationDbContext context, Guid id) =>
-            {
-                await AuthenticationMiddleware.UserAuthorize(httpContext);
-                    
-                if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-                {
-                    return Results.Unauthorized();
-                } 
-                
-                var product = await context.Products.FindAsync(id);
-                if (product is null)
-                {
-                    return Results.NotFound();
-                }
+        {
+            await AuthenticationMiddleware.UserAuthorize(httpContext);
 
-                return Results.Ok(new GetProductByIdResponse(product));
-            }).WithName("GetProductById")
-            .Produces<GetProductByIdResponse>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound);
+            if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
+            {
+                return Results.Unauthorized();
+            }
+
+            var product = await context.Products.FindAsync(id);
+
+            if (product is null)
+            {
+                return Results.NotFound();
+            }
+
+            return Results.Ok(new GetProductByIdResponse(product));
+        });
     }
 }

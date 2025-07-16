@@ -42,14 +42,15 @@ public class AuthenticationMiddleware
     public static async Task<bool> AdminAuthorize(HttpContext context)
     {
             bool authorized = false;
+            
             var roleClaimString = context.User.FindFirst("realm_access")?.Value;
+            
             if (roleClaimString is not null)
             {
                 var jsonRoleClaim = JsonSerializer.Deserialize<JsonElement>(roleClaimString);
             
                 if (jsonRoleClaim.TryGetProperty("roles", out JsonElement roleElement))
                 {
-                        
                     foreach (var role in roleElement.EnumerateArray())
                     {
                         var roleName = role.GetString();
@@ -82,10 +83,10 @@ public class AuthenticationMiddleware
             
                 if (jsonRoleClaim.TryGetProperty("roles", out JsonElement roleElement))
                 {
-                        
                     foreach (var role in roleElement.EnumerateArray())
                     {
                         var roleName = role.GetString();
+                        
                         if (roleName is not null && (roleName.Equals("grad-user") || roleName.Equals("grad-admin")))
                         {
                             authorized = true;

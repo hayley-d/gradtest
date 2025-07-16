@@ -19,26 +19,34 @@ public static class ServiceConfiguration
                     .AllowAnyHeader()
                     .AllowCredentials());
         });
+        
         builder.Services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
+        
         builder.Services.AddScoped<IExchangeRateSyncJob, ExchangeRateSyncJob>();    
         
         builder.Services.AddEndpointsApiExplorer();
+        
         builder.Services.AddSwaggerGen(x =>
         {
             x.EnableAnnotations();
             x.SchemaFilter<SmartEnumSchemaFilter<Category>>();
         });
+        
         builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
+        
         builder.Services.AddHangfireServer();
+        
         SetupSwaggerDoc(builder);
     }  
     
     public static void SetupSwaggerDoc(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
+        
         const string displayName = "Grad Test API";
         
         var authorizationUrl = builder.Configuration["OIDC:AuthorizeUrl"]!;
+        
         var tokenUrl = builder.Configuration["OIDC:TokenUrl"]!;
         
         builder.Services.AddSwaggerGen(options =>
@@ -94,6 +102,7 @@ public static class ServiceConfiguration
             ArgumentNullException.ThrowIfNull(clientId);
         
             app.UseSwagger();
+            
             app.UseSwaggerUI(c =>
             {
                 c.OAuthClientId(clientId);

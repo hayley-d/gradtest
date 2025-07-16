@@ -59,8 +59,9 @@ public static class CreateOrder
                     else
                     {
                         dbProduct.StockQuantity -= product.Quantity;
-                        context.Products.Update(dbProduct);
+                        //context.Products.Update(dbProduct);
                     }
+                    await context.SaveChangesAsync();
                 }
                 catch (Exception ex)
                 {

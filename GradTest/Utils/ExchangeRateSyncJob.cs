@@ -24,6 +24,7 @@ public class ExchangeRateSyncJob: IExchangeRateSyncJob
       try
       {
          var rate = await _exchangeRateService.GetExchangeRateAsync();
+         
          if (rate is not null)
          {
             _context.ExchangeRates.Add(rate);

@@ -22,9 +22,11 @@ public static class ListProducts
                     } 
                     
                     int validatedPageNumber = query.PageNumber < 1 ? 1 : query.PageNumber;
+                    
                     int validatedPageSize = (query.PageSize < 1 || query.PageSize > 100) ? 10 : query.PageSize;
 
                     var category = query.GetCategory();
+                    
                     var productsQuery = context.Products.AsQueryable();
 
                     if (category is not null)
