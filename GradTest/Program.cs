@@ -10,10 +10,12 @@ builder.SetupServices();
 builder.SetupEntityFramework();
 builder.SetupLogging();
 
-
 var app = builder.Build();
 app.SetupJobs();
-app.MapEndpoints();
+
+app.AddSwaggerDoc(builder);
+app.UseHttpsRedirection();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -23,8 +25,9 @@ if (app.Environment.IsDevelopment())
         options.OAuthUsePkce(); 
     });
 }
+app.MapEndpoints();
 
 app.MapGet("/", () => Results.Redirect("/swagger"));
-
+app.UseCors("Application");
 
 app.Run();

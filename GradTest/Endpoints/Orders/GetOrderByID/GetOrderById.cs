@@ -10,6 +10,7 @@ public static class GetOrderById
     {
         builder.MapGet("/orders/{id}", async (HttpContext httpContext,ApplicationDbContext context,Guid id) =>
         {
+            //IHttpContext handler
             var userId = httpContext.User.FindFirst("sub")?.Value;
             
             if (string.IsNullOrEmpty(userId))

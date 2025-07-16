@@ -17,6 +17,6 @@ public static class GetAllOrders
 
             var response = orders.Select(o => new GetAllOrdersResponse(o)).ToList();
             return Results.Ok(response); 
-        }).RequireAuthorization();
+        });
     }
 }
