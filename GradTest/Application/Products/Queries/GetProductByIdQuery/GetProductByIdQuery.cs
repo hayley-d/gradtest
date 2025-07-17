@@ -1,6 +1,5 @@
+using MediatR;
+
 namespace GradTest.Application.Products.Queries.GetProductByIdQuery;
 
-public class GetProductByIdQuery
-{
-    
-}
+public sealed record GetProductByIdQuery(Guid ProductId) : IRequest<GetProductByIdQueryResponse>;

@@ -4,8 +4,6 @@ using GradTest.Application.Products.Commands.DeleteProductCommand;
 using GradTest.Application.Products.Commands.UpdateProductCommand;
 using GradTest.Application.Products.Queries.GetProductByIdQuery;
 using GradTest.Application.Products.Queries.ListProductsQuery;
-using GradTest.Endpoints.Products.GetProductByID;
-using GradTest.Endpoints.Products.ListProducts;
 using MediatR;
 
 namespace GradTest.API.Endpoints.Products;
@@ -14,8 +12,9 @@ public static class MapProductsEndpoint
 {
     public static void MapProductsEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGetProductById();
-        app.MapListProducts();
+        app
+            .MapProductCommands()
+            .MapProductQueries();
     }
 
     private static IEndpointRouteBuilder MapProductCommands(this IEndpointRouteBuilder app)
