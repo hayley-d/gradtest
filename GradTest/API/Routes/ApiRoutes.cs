@@ -1,6 +1,6 @@
 namespace GradTest.API.Routes;
 
-public static class ApiEndpoints
+public static class ApiRoutes
 {
         public static class Orders
         {

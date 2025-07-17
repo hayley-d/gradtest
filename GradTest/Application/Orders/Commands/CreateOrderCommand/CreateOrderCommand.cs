@@ -1,8 +1,9 @@
 using GradTest.Models;
 using MediatR;
-namespace GradTest.Application.Orders.Commands.CreateOrder;
 
-public sealed record CreateOrderCommand(List<CreateOrderCommand.Product> Products) : IRequest<CreateOrderResponse>
+namespace GradTest.Application.Orders.Commands.CreateOrderCommand;
+
+public sealed record CreateOrderCommand(List<CreateOrderCommand.Product> Products) : IRequest<CreateOrderCommandResponse>
 {
    public record Product(Guid ProductId, int Quantity)
    {

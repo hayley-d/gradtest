@@ -1,6 +1,8 @@
-using GradTest.Endpoints.Products;
+using GradTest.API.Endpoints.Orders;
 using GradTest.Endpoints.Orders;
-namespace GradTest.Endpoints;
+using GradTest.Endpoints.Products;
+
+namespace GradTest.API.Endpoints;
 
 public static class ApiEndpoints
 {

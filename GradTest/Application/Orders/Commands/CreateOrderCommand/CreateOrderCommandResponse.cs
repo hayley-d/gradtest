@@ -1,10 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using GradTest.Models;
-using Swashbuckle.AspNetCore.Annotations;
 
-namespace GradTest.Application.Orders.Commands.CreateOrder;
+namespace GradTest.Application.Orders.Commands.CreateOrderCommand;
 
-public class CreateOrderResponse
+public class CreateOrderCommandResponse
 {
     public Guid Id { get; init; }
 
@@ -16,7 +14,7 @@ public class CreateOrderResponse
 
     public List<OrderProduct> Products { get; init; } = new();
 
-    public CreateOrderResponse(Order order)
+    public CreateOrderCommandResponse(Order order)
     {
         Id = order.Id;
         UserId = order.UserId;
@@ -25,5 +23,5 @@ public class CreateOrderResponse
         Products = order.Products;
     }
     
-    public CreateOrderResponse() {}
+    public CreateOrderCommandResponse() {}
 }

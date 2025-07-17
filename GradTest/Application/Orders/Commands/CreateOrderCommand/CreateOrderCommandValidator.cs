@@ -1,10 +1,10 @@
 using FluentValidation;
 
-namespace GradTest.Application.Orders.Commands.CreateOrder;
+namespace GradTest.Application.Orders.Commands.CreateOrderCommand;
 
-public class CreateOrderValidator : AbstractValidator<CreateOrderCommand>
+public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
-    public CreateOrderValidator()
+    public CreateOrderCommandValidator()
     {
         RuleFor(x => x.Products)
             .NotEmpty().WithMessage("At least one product must be included.")
@@ -17,7 +17,7 @@ public class CreateOrderValidator : AbstractValidator<CreateOrderCommand>
         });
     }    
     
-    private bool HaveNoDuplicates(List<CreateOrderCommand.Product> products)
+    private bool HaveNoDuplicates(List<Commands.CreateOrderCommand.CreateOrderCommand.Product> products)
     {
         return products
             .Select(p => p.ProductId)

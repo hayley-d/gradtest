@@ -1,6 +1,6 @@
 using FluentValidation;
 using GradTest.Application.Common.Behaviors;
-using GradTest.Application.Orders.Commands.CreateOrder;
+using GradTest.Application.Orders.Commands.CreateOrderCommand;
 using GradTest.Models;
 using GradTest.Services;
 using GradTest.Utils;
@@ -44,7 +44,7 @@ public static class ServiceConfiguration
         builder.Services.AddMediatR(cfg =>
             cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommand).Assembly));
 
-        builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderCommandValidator>();
 
         builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
  

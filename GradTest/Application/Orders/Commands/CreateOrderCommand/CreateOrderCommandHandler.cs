@@ -3,12 +3,11 @@ using GradTest.Persistence;
 using GradTest.Services;
 using GradTest.Utils;
 using MediatR;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
-namespace GradTest.Application.Orders.Commands.CreateOrder;
+namespace GradTest.Application.Orders.Commands.CreateOrderCommand;
 
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderResponse>
+public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderCommandResponse>
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IExchangeRateService _exchangeRateService;
@@ -22,7 +21,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
        _httpContextAccessor = httpContextAccessor;
     }
     
-    public async Task<CreateOrderResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<CreateOrderCommandResponse> Handle(Commands.CreateOrderCommand.CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext!;
         await AuthenticationMiddleware.UserAuthorize(httpContext);
@@ -81,6 +80,6 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
         _dbContext.Orders.Add(order);
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateOrderResponse(order);
+        return new CreateOrderCommandResponse(order);
     }
 }

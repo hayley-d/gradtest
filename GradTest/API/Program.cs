@@ -1,4 +1,5 @@
 using GradTest.API.Configuration;
+using GradTest.API.Endpoints;
 using GradTest.Configuration;
 using GradTest.Endpoints;
 using GradTest.Models;
