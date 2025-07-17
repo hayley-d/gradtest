@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace GradTest.Models;
+namespace GradTest.Domain.Entities;
 
 public class Order
 {

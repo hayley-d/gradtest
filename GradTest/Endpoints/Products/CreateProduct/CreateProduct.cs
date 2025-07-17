@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using GradTest.Domain.Entities;
 using GradTest.Models;
 using GradTest.Persistence;
 using GradTest.Utils;

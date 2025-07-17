@@ -1,4 +1,4 @@
-namespace GradTest.Models;
+namespace GradTest.Domain.Entities;
 
 public class ExchangeRate
 {

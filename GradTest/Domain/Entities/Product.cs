@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using GradTest.Models;
 
-namespace GradTest.Models;
+namespace GradTest.Domain.Entities;
 
 public class Product
 {

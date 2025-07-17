@@ -1,9 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using GradTest.Persistence;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace GradTest.Models;
+namespace GradTest.Domain.Entities;
 
 public class OrderProduct
 {

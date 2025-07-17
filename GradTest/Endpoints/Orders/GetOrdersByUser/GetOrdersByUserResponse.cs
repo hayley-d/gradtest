@@ -1,5 +1,6 @@
 
 using System.ComponentModel.DataAnnotations;
+using GradTest.Domain.Entities;
 using GradTest.Models;
 using Swashbuckle.AspNetCore.Annotations;
 

@@ -1,5 +1,10 @@
 using GradTest.API.Routes;
 using GradTest.Application.Orders.Commands.CreateOrderCommand;
+using GradTest.Application.Orders.Queries.GetAllOrders;
+using GradTest.Application.Orders.Queries.GetOrderById;
+using GradTest.Application.Orders.Queries.GetOrderByUser;
+using GradTest.Endpoints.Orders.GetOrderByID;
+using GradTest.Endpoints.Orders.GetOrdersByUser;
 using MediatR;
 
 namespace GradTest.API.Endpoints.Orders;
@@ -26,19 +31,19 @@ public static class MapOrderEndpoints
 
     private static IEndpointRouteBuilder MapOrdersQueries(this IEndpointRouteBuilder app)
     {
-        app.MapGet(ApiRoutes.Orders.GetAll, async (GetAllOrders query, IMediator mediator) =>
+        app.MapGet(ApiRoutes.Orders.GetAll, async (GetAllOrdersQuery query, IMediator mediator) =>
         {
             var result = await mediator.Send(query);
             return Results.Ok(result);
         });
         
-        app.MapGet(ApiRoutes.Orders.GetById, async (GetOrderById query, IMediator mediator) =>
+        app.MapGet(ApiRoutes.Orders.GetById, async (GetOrderByIdQuery query, IMediator mediator) =>
         {
             var result = await mediator.Send(query);
             return result is not null ? Results.Ok(result) : Results.NotFound();;
         });
         
-        app.MapGet(ApiRoutes.Orders.GetByUserId, async (GetOrdersByUser query, IMediator mediator) =>
+        app.MapGet(ApiRoutes.Orders.GetByUserId, async (GetOrderByUserQuery query, IMediator mediator) =>
         {
             var result = await mediator.Send(query);
             return Results.Ok(result);

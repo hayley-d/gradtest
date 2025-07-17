@@ -1,3 +1,4 @@
+using GradTest.Domain.Entities;
 using GradTest.Models;
 using MediatR;
 

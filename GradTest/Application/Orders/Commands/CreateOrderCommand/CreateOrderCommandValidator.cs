@@ -6,11 +6,11 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
 {
     public CreateOrderCommandValidator()
     {
-        RuleFor(x => x.Products)
+        RuleFor(command => command.Products)
             .NotEmpty().WithMessage("At least one product must be included.")
             .Must(HaveNoDuplicates).WithMessage("Duplicate product IDs are not allowed.");
 
-        RuleForEach(x => x.Products).ChildRules(product =>
+        RuleForEach(command => command.Products).ChildRules(product =>
         {
             product.RuleFor(p => p.Quantity)
                 .GreaterThan(0).WithMessage("Quantity must be at least 1.");
@@ -20,7 +20,7 @@ public class CreateOrderCommandValidator : AbstractValidator<CreateOrderCommand>
     private bool HaveNoDuplicates(List<Commands.CreateOrderCommand.CreateOrderCommand.Product> products)
     {
         return products
-            .Select(p => p.ProductId)
+            .Select(product => product.ProductId)
             .Distinct()
             .Count() == products.Count;
     } 

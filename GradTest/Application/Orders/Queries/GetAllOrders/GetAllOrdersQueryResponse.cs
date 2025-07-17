@@ -1,9 +1,7 @@
 using GradTest.Domain.Entities;
-using GradTest.Models;
+namespace GradTest.Application.Orders.Queries.GetAllOrders;
 
-namespace GradTest.Application.Orders.Commands.CreateOrderCommand;
-
-public class CreateOrderCommandResponse
+public class GetAllOrdersQueryResponse
 {
     public Guid Id { get; init; }
 
@@ -15,7 +13,7 @@ public class CreateOrderCommandResponse
 
     public List<OrderProduct> Products { get; init; } = new();
 
-    public CreateOrderCommandResponse(Order order)
+    public GetAllOrdersQueryResponse(Order order)
     {
         Id = order.Id;
         UserId = order.UserId;
@@ -24,5 +22,5 @@ public class CreateOrderCommandResponse
         Products = order.Products;
     }
     
-    public CreateOrderCommandResponse() {}
+    public GetAllOrdersQueryResponse() {}
 }
