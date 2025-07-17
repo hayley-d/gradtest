@@ -1,6 +1,5 @@
 using GradTest.API.Endpoints.Orders;
-using GradTest.Endpoints.Orders;
-using GradTest.Endpoints.Products;
+using GradTest.API.Endpoints.Products;
 
 namespace GradTest.API.Endpoints;
 

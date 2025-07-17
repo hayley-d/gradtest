@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using GradTest.Models;
+using GradTest.Domain.Enums;
 
 namespace GradTest.Domain.Entities;
 
@@ -32,7 +32,7 @@ public class Product
     [NotMapped]
     public Category Category
     {
-        get => Models.Category.FromValue(CategoryValue);
+        get => Category.FromValue(CategoryValue);
         set => CategoryValue = value.Value;
     }
 

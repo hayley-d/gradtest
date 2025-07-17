@@ -1,5 +1,6 @@
-namespace GradTest.Models;
 using Ardalis.SmartEnum;
+
+namespace GradTest.Domain.Enums;
 
 public sealed class Category: SmartEnum<Category>
 {

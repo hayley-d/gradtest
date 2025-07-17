@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using GradTest.Models;
+using GradTest.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace GradTest.Endpoints.Products.UpdateProduct;

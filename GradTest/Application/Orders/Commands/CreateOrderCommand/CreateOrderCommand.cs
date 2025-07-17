@@ -1,5 +1,4 @@
 using GradTest.Domain.Entities;
-using GradTest.Models;
 using MediatR;
 
 namespace GradTest.Application.Orders.Commands.CreateOrderCommand;

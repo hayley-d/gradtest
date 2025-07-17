@@ -1,5 +1,4 @@
 using GradTest.Domain.Entities;
-using GradTest.Models;
 
 namespace GradTest.Services;
 

@@ -1,5 +1,5 @@
 using GradTest.Domain.Entities;
-using GradTest.Models;
+using GradTest.Domain.Enums;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace GradTest.Endpoints.Products.GetProductByID;

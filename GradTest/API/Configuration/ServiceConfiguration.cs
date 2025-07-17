@@ -1,7 +1,7 @@
 using FluentValidation;
 using GradTest.Application.Common.Behaviors;
 using GradTest.Application.Orders.Commands.CreateOrderCommand;
-using GradTest.Models;
+using GradTest.Domain.Enums;
 using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;

@@ -1,5 +1,4 @@
 using GradTest.Domain.Entities;
-using GradTest.Models;
 using GradTest.Persistence;
 using GradTest.Services;
 using GradTest.Utils;
@@ -22,10 +21,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
        _httpContextAccessor = httpContextAccessor;
     }
     
-    public async Task<CreateOrderCommandResponse> Handle(Commands.CreateOrderCommand.CreateOrderCommand request, CancellationToken cancellationToken)
+    public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext!;
-        await AuthenticationMiddleware.UserAuthorize(httpContext);
+        await AuthenticationMiddleware.AdminAuthorize(httpContext);
 
         if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
             throw new UnauthorizedAccessException();

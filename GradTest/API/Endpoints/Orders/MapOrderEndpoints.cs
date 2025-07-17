@@ -3,8 +3,6 @@ using GradTest.Application.Orders.Commands.CreateOrderCommand;
 using GradTest.Application.Orders.Queries.GetAllOrders;
 using GradTest.Application.Orders.Queries.GetOrderById;
 using GradTest.Application.Orders.Queries.GetOrderByUser;
-using GradTest.Endpoints.Orders.GetOrderByID;
-using GradTest.Endpoints.Orders.GetOrdersByUser;
 using MediatR;
 
 namespace GradTest.API.Endpoints.Orders;
@@ -40,7 +38,7 @@ public static class MapOrderEndpoints
         app.MapGet(ApiRoutes.Orders.GetById, async (GetOrderByIdQuery query, IMediator mediator) =>
         {
             var result = await mediator.Send(query);
-            return result is not null ? Results.Ok(result) : Results.NotFound();;
+            return Results.Ok(result);;
         });
         
         app.MapGet(ApiRoutes.Orders.GetByUserId, async (GetOrderByUserQuery query, IMediator mediator) =>
