@@ -1,4 +1,4 @@
-namespace GradTest.Configuration;
+namespace GradTest.API.Configuration.Builder;
 
 public static class LoggingConfiguration
 {

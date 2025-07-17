@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GradTest.Configuration;
+namespace GradTest.API.Configuration.Builder;
 
 public static class AuthenticationConfiguration
 {

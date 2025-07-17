@@ -1,8 +1,7 @@
-using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;
 
-namespace GradTest.Configuration;
+namespace GradTest.API.Configuration.App;
 
 public static class JobConfiguration
 {

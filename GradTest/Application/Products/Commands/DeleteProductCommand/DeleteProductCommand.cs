@@ -1,6 +1,5 @@
+using MediatR;
+
 namespace GradTest.Application.Products.Commands.DeleteProductCommand;
 
-public class DeleteProductCommand
-{
-    
-}
+public sealed record DeleteProductCommand(Guid ProductId) : IRequest;

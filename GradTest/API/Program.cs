@@ -1,6 +1,7 @@
 using GradTest.API.Configuration;
+using GradTest.API.Configuration.App;
+using GradTest.API.Configuration.Builder;
 using GradTest.API.Endpoints;
-using GradTest.Configuration;
 using GradTest.Endpoints;
 using GradTest.Utils;
 using Hangfire;
@@ -11,6 +12,7 @@ builder.SetupAuthentication();
 builder.SetupEntityFramework();
 builder.SetupLogging();
 builder.SetupServices();
+builder.SetupValidatiors();
 
 var app = builder.Build();
 

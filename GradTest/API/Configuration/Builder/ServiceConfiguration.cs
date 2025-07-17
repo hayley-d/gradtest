@@ -9,7 +9,7 @@ using Hangfire.PostgreSql;
 using MediatR;
 using Microsoft.OpenApi.Models;
 
-namespace GradTest.API.Configuration;
+namespace GradTest.API.Configuration.Builder;
 
 public static class ServiceConfiguration
 {

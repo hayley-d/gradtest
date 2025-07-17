@@ -1,7 +1,8 @@
-namespace GradTest.Configuration;
-using Microsoft.EntityFrameworkCore;
 using GradTest.Persistence;
 using GradTest.Utils;
+using Microsoft.EntityFrameworkCore;
+
+namespace GradTest.API.Configuration.Builder;
 
 public static class EntityFrameworkConfiguration
 {
