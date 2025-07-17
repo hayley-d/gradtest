@@ -8,7 +8,7 @@ public class DeleteProductCommandValidator : AbstractValidator<DeleteProductComm
 {
     public DeleteProductCommandValidator(ApplicationDbContext context)
     {
-        RuleFor(x => x.ProductId)
+        RuleFor(product => product.ProductId)
             .NotEmpty().WithMessage("Product ID must be provided.")
             .MustAsync(async (productId, cancellation) =>
                 await context.Products.AnyAsync(p => p.Id == productId, cancellation))
