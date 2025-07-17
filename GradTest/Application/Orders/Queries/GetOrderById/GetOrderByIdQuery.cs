@@ -1,6 +1,6 @@
+using GradTest.Endpoints.Orders.GetOrderByID;
+using MediatR;
+
 namespace GradTest.Application.Orders.Queries.GetOrderById;
 
-public class GetOrderByIdQuery
-{
-    
-}
+public sealed record GetOrderByIdQuery (Guid OrderId) : IRequest<GetOrderByIdQueryResponse>;
