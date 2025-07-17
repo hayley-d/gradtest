@@ -1,15 +1,31 @@
+using FluentValidation;
+using GradTest.Application.Common.Behaviors;
+using GradTest.Application.Orders.Commands.CreateOrder;
 using GradTest.Models;
 using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;
 using Hangfire.PostgreSql;
+using MediatR;
 using Microsoft.OpenApi.Models;
 
-namespace GradTest.Configuration;
+namespace GradTest.API.Configuration;
 
 public static class ServiceConfiguration
 {
     public static void SetupServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddEndpointsApiExplorer();
+        
+        builder
+            .SetupCors()
+            .SetupRucurringJobs()
+            .SetupSwaggerDoc()
+            .SetupHangfireServices()
+            .SetupMediatR();
+    }
+
+    private static WebApplicationBuilder SetupCors(this WebApplicationBuilder builder)
     {
         builder.Services.AddCors(options =>
         {
@@ -20,26 +36,21 @@ public static class ServiceConfiguration
                     .AllowCredentials());
         });
         
-        builder.Services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
-        
-        builder.Services.AddScoped<IExchangeRateSyncJob, ExchangeRateSyncJob>();    
-        
-        builder.Services.AddEndpointsApiExplorer();
-        
-        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
-        
-        builder.Services.AddHangfireServer();
-        
-        builder.Services.AddSwaggerGen(x =>
-        {
-            x.EnableAnnotations();
-            x.SchemaFilter<SmartEnumSchemaFilter<Category>>();
-        });
-        
-        SetupSwaggerDoc(builder);
-    }  
+        return builder;
+    }
+
+    private static void SetupMediatR(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMediatR(cfg =>
+            cfg.RegisterServicesFromAssembly(typeof(CreateOrderCommand).Assembly));
+
+        builder.Services.AddValidatorsFromAssemblyContaining<CreateOrderValidator>();
+
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+ 
+    }
     
-    public static void SetupSwaggerDoc(this WebApplicationBuilder builder)
+    private static WebApplicationBuilder SetupSwaggerDoc(this WebApplicationBuilder builder)
     {
         builder.Services.AddEndpointsApiExplorer();
         
@@ -51,6 +62,8 @@ public static class ServiceConfiguration
         
         builder.Services.AddSwaggerGen(options =>
         {
+            options.EnableAnnotations();
+            options.SchemaFilter<SmartEnumSchemaFilter<Category>>(); 
             options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = displayName,
@@ -91,24 +104,36 @@ public static class ServiceConfiguration
                 }
             });
         });
+        
+        return builder;
+    }
+    
+    private static WebApplicationBuilder SetupHangfireServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
+        builder.Services.AddHangfireServer();
+        return builder;
     }
 
-    public static void AddSwaggerDoc(this WebApplication app, IHostApplicationBuilder builder)
+    private static WebApplicationBuilder SetupRucurringJobs(this WebApplicationBuilder builder)
     {
-        if (app.Environment.IsDevelopment())
+        builder.Services.AddHttpClient<IExchangeRateService, ExchangeRateService>();
+        builder.Services.AddScoped<IExchangeRateSyncJob, ExchangeRateSyncJob>();
+        
+        return builder;
+    }
+    
+    public static void ConfigureSwaggerUi(this WebApplication app, IHostApplicationBuilder builder)
+    {
+        if (!app.Environment.IsDevelopment()) return;
+        
+        app.UseSwagger();
+        
+        app.UseSwaggerUI(options =>
         {
-            var clientId = builder.Configuration["OIDC:ClientId"]!;
-        
-            ArgumentNullException.ThrowIfNull(clientId);
-        
-            app.UseSwagger();
-            
-            app.UseSwaggerUI(c =>
-            {
-                c.OAuthClientId(clientId);
-                c.OAuthAppName("Grad Test API");
-                c.OAuthUsePkce();
-            });
-        }
+            options.OAuthClientId(builder.Configuration["OIDC:ClientId"]);
+            options.OAuthUsePkce(); 
+            options.OAuthAppName("Grad Test API");
+        });
     }
 }
