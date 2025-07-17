@@ -1,5 +1,4 @@
 using System.Text.Json;
-using GradTest.Models;
 using GradTest.Persistence;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.EntityFrameworkCore;
