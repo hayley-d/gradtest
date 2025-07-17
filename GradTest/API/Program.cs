@@ -15,6 +15,7 @@ builder.SetupServices();
 var app = builder.Build();
 
 //app.UseMiddleware<AuthenticationMiddleware>();
+app.ConfigureMiddleware();
 app.ConfigureSwaggerUi(builder);
 app.UseHttpsRedirection();
 

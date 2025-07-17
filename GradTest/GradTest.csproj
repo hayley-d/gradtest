@@ -35,7 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="API\Middleware\" />
     <Folder Include="Application\Common\Interfaces\" />
     <Folder Include="Application\Orders\Validators\" />
     <Folder Include="Application\Products\Commands\" />
