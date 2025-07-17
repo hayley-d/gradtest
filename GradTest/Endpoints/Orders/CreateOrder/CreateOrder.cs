@@ -21,7 +21,7 @@ public static class CreateOrder
                 return Results.Unauthorized();
             } 
             
-            string? userId = await AuthenticationMiddleware.GetUserID(httpContext);
+            var userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
             if (string.IsNullOrEmpty(userId))
             {
@@ -43,7 +43,7 @@ public static class CreateOrder
                 return Results.ValidationProblem(errors);
             }
             
-            decimal latestRate = await context.ExchangeRates
+            var latestRate = await context.ExchangeRates
                 .OrderByDescending(r => r.Date)
                 .Select(r => r.ZAR)
                 .FirstOrDefaultAsync();
@@ -51,6 +51,7 @@ public static class CreateOrder
             if (latestRate == 0)
             {
                 var liveRate = await exchangeRateService.GetExchangeRateAsync();
+                
                 if (liveRate is not null)
                 {
                     context.ExchangeRates.Add(liveRate);
@@ -91,14 +92,11 @@ public static class CreateOrder
                 
             }
             
-            List<OrderProduct> products = new List<OrderProduct>();
-            
-            foreach (var product in req.Products)
-            {
-                products.Add(product.Convert());
-            }
-            
-            Order newOrder = new Order {
+            var products = req.Products
+                .Select(product => product.Convert())
+                .ToList();
+
+            var newOrder = new Order {
                 UserId = userId,
                 Products = products,
                 ZarToUsd = latestRate,

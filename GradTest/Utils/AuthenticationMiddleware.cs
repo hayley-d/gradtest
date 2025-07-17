@@ -41,7 +41,7 @@ public class AuthenticationMiddleware
 
     public static async Task<bool> AdminAuthorize(HttpContext context)
     {
-            bool authorized = false;
+            var authorized = false;
             
             var roleClaimString = context.User.FindFirst("realm_access")?.Value;
             
@@ -73,7 +73,7 @@ public class AuthenticationMiddleware
 
     public static async Task<bool> UserAuthorize(HttpContext httpContext)
     {
-            bool authorized = false;
+            var authorized = false;
                     
             var roleClaimString = httpContext.User.FindFirst("realm_access")?.Value;
                     

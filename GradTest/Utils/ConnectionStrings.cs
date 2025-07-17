@@ -21,7 +21,7 @@ public static class ConnectionStrings
    {
        DotNetEnv.Env.Load();
        
-       string apiKey = Environment.GetEnvironmentVariable("OPEN_EX_APIKEY") ?? throw new InvalidOperationException("Missing required environment variable: OPEN_EX_APIKEY");
+       var apiKey = Environment.GetEnvironmentVariable("OPEN_EX_APIKEY") ?? throw new InvalidOperationException("Missing required environment variable: OPEN_EX_APIKEY");
 
        if (string.IsNullOrWhiteSpace(apiKey)) 
            throw new InvalidOperationException("Missing required environment variable: OPEN_EX_APIKEY");

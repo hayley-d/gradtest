@@ -18,7 +18,7 @@ public static class GetOrderById
                 return Results.Unauthorized();
             } 
             
-            string? userId = await AuthenticationMiddleware.GetUserID(httpContext);
+            var userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
             if (string.IsNullOrEmpty(userId))
             {
