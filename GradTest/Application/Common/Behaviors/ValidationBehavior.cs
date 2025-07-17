@@ -13,10 +13,10 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
         _validators = validators;
     }
 
-    private async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
         if (!_validators.Any())
-            return await next();
+            return await next(cancellationToken);
 
         var context = new ValidationContext<TRequest>(request);
 
@@ -43,11 +43,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             throw new ValidationException("Validation failed", failures);
         }
 
-        return await next();
-    }
-
-    public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
-    {
-        return Handle(request, next, cancellationToken);
+        return await next(cancellationToken);
     }
 }

@@ -26,8 +26,6 @@ app.SetupJobs();
 
 app.MapEndpoints();
 
-app.MapGet("/", () => Results.Redirect("/swagger"));
-
 app.UseCors("Application");
 
 app.Run();
