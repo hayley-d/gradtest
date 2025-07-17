@@ -1,22 +1,23 @@
+using GradTest.Application.Orders.Queries.GetOrderById;
 using GradTest.Persistence;
 using GradTest.Utils;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GradTest.Application.Orders.Queries.GetOrderById;
+namespace GradTest.Application.Orders.Queries.GetOrderByUser;
 
-public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, GetOrderByIdQueryResponse>
+public class GetOrderByUserQueryHandler : IRequestHandler<GetOrderByUserQuery, IList<GetOrderByUserQueryResponse>>
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public GetOrderByIdQueryHandler(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+    public GetOrderByUserQueryHandler(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
     {
         _dbContext = dbContext;
         _httpContextAccessor = httpContextAccessor;
     }
     
-    public async Task<GetOrderByIdQueryResponse> Handle(GetOrderByIdQuery query, CancellationToken cancellationToken)
+    public async Task<IList<GetOrderByUserQueryResponse>> Handle(GetOrderByUserQuery query, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext;
         await AuthenticationMiddleware.AdminAuthorize(httpContext);
@@ -29,14 +30,9 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, GetOr
         if (string.IsNullOrEmpty(userId))
             throw new UnauthorizedAccessException();
         
-        var order = await _dbContext.Orders.FirstOrDefaultAsync(order => order.Id == query.OrderId, cancellationToken: cancellationToken);
-
-        if (order is null)
-            throw new KeyNotFoundException();
-
-        if (order.UserId != userId)
-            throw new UnauthorizedAccessException();
-
-        return new GetOrderByIdQueryResponse(order);
+        return await _dbContext.Orders
+            .Where(order => order.UserId == userId)
+            .Select(order => new GetOrderByUserQueryResponse(order))
+            .ToListAsync(cancellationToken: cancellationToken);
     }
 }

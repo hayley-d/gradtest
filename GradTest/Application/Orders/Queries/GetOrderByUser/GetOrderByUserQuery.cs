@@ -1,6 +1,5 @@
+using MediatR;
+
 namespace GradTest.Application.Orders.Queries.GetOrderByUser;
 
-public class GetOrderByUserQuery
-{
-    
-}
+public sealed record GetOrderByUserQuery : IRequest<IList<GetOrderByUserQueryResponse>>;

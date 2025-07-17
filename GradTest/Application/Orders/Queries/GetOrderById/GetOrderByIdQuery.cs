@@ -1,4 +1,3 @@
-using GradTest.Endpoints.Orders.GetOrderByID;
 using MediatR;
 
 namespace GradTest.Application.Orders.Queries.GetOrderById;
