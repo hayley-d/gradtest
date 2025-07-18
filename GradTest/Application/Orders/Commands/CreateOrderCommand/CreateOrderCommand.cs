@@ -83,15 +83,19 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
         var order = new Order
         {
             UserId = userId,
-            Products = orderProducts,
             ZarToUsd = latestRate,
         };
+
+        foreach (var orderProduct in orderProducts)
+        {
+            _dbContext.OrderProducts.Add(orderProduct);
+        }
 
         _dbContext.Orders.Add(order);
         
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return new CreateOrderCommandResponse(order);
+        return new CreateOrderCommandResponse(order, orderProducts);
     }
 }
 
