@@ -1,13 +1,10 @@
-using GradTest.API.Configuration;
 using GradTest.API.Configuration.App;
 using GradTest.API.Configuration.Builder;
 using GradTest.API.Endpoints;
-using GradTest.Endpoints;
-using GradTest.Utils;
 using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddHttpContextAccessor();
 builder.SetupAuthentication();
 builder.SetupEntityFramework();
 builder.SetupLogging();
@@ -16,7 +13,6 @@ builder.SetupValidatiors();
 
 var app = builder.Build();
 
-//app.UseMiddleware<AuthenticationMiddleware>();
 app.ConfigureMiddleware();
 app.ConfigureSwaggerUi(builder);
 app.UseHttpsRedirection();

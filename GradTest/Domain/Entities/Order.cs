@@ -15,11 +15,11 @@ public class Order
     public DateTime OrderDate { get; init; } = DateTime.UtcNow;
     
     [Required]
-    [MinLength(1, ErrorMessage = "At least one product is required.")]
-    public List<OrderProduct> Products { get; init; } 
+    [MinLength(1)]
+    public List<OrderProduct> Products { get; init; } = [];
     
     [Required]
-    [Range(0.0001, double.MaxValue, ErrorMessage = "Exchange rate must be a positive number.")]
+    [Range(0.0001, double.MaxValue)]
     public required decimal ZarToUsd { get; init; }
 
     public Order(string userId, List<OrderProduct> products, decimal zar)

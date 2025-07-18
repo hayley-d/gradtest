@@ -6,8 +6,8 @@ namespace GradTest.Domain.Entities;
 
 public class Product
 {
-    [Required]
-    public Guid Id { get; init; }
+    [Key]
+    public Guid Id { get; init; } = Guid.NewGuid();
     
     [Required]
     [StringLength(100)]
@@ -18,22 +18,23 @@ public class Product
     public required string Description { get; set; }
     
     [Required]
-    [Range(1, 3)]
-    public int CategoryValue { get; set; }
-    
-    [Required]
-    [Range(0, Double.MaxValue)]
+    [Range(0,double.MaxValue)]
     public decimal Price { get; set; }
     
     [Required]
-    [Range(0, Int32.MaxValue)]
+    [Range(0, int.MaxValue)]
     public int StockQuantity { get; set; }
     
-    [NotMapped]
-    public Category Category
+    [Required]
+    public Category Category  { get; set; }
+
+    public Product(string name, string description, decimal price, int stockQuantity, Category category)
     {
-        get => Category.FromValue(CategoryValue);
-        set => CategoryValue = value.Value;
+        Name = name;
+        Description = description;
+        Price = price;
+        StockQuantity = stockQuantity;
+        Category = category;
     }
 
     public Product()
