@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Application\Common\Interfaces\" />
+    <Folder Include="Domain\Interfaces\" />
     <Folder Include="Infrastructure\" />
   </ItemGroup>
 
