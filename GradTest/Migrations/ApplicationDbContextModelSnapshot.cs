@@ -121,8 +121,8 @@ namespace GradTest.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("60cc318b-5231-4138-b098-3618955a9ce3"),
-                            Category = "Book",
+                            Id = new Guid("1b3d0b78-ba5e-4213-a46d-28fc5259b576"),
+                            Category = "Books",
                             Description = "A mythic history of Middle-earth by J.R.R. Tolkien.",
                             Name = "The Silmarillion",
                             Price = 299.99m,
@@ -130,8 +130,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fe22e924-98bc-4458-94de-390633a9af5e"),
-                            Category = "Book",
+                            Id = new Guid("b57e7561-3b40-473b-83f8-f11aa2d24cf8"),
+                            Category = "Books",
                             Description = "The first novel in the Witcher Saga by Andrzej Sapkowski.",
                             Name = "Blood of Elves",
                             Price = 199.99m,
@@ -139,8 +139,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c7182d79-e15a-44cd-bef8-0358a885d09f"),
-                            Category = "Book",
+                            Id = new Guid("77f408ea-6a8d-47ab-a5aa-c02d70acd8be"),
+                            Category = "Books",
                             Description = "The second volume of The Lord of the Rings.",
                             Name = "The Two Towers",
                             Price = 249.99m,
@@ -148,8 +148,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("ec0166b7-12b9-4814-96a5-a1473c6aa6a9"),
-                            Category = "Book",
+                            Id = new Guid("547cb7c0-ab1f-43ca-aef5-9470971ddabd"),
+                            Category = "Books",
                             Description = "Geralt continues his journey amidst political tension.",
                             Name = "Time of Contempt",
                             Price = 189.99m,
@@ -157,8 +157,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("dd920e55-c7f4-4695-a7a8-e6b93b90a671"),
-                            Category = "Book",
+                            Id = new Guid("eea0df23-62f3-45ff-9b8b-66e5c93496ea"),
+                            Category = "Books",
                             Description = "Bilbo’s adventure to the Lonely Mountain.",
                             Name = "The Hobbit",
                             Price = 219.99m,
@@ -166,8 +166,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("57ef1877-7411-4b7b-b66f-2b347b084405"),
-                            Category = "Book",
+                            Id = new Guid("a5aa4a09-9a16-45c7-a272-7de625961987"),
+                            Category = "Books",
                             Description = "Final book in the Witcher Saga.",
                             Name = "Lady of the Lake",
                             Price = 209m,
@@ -175,8 +175,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f062a794-6199-4b5d-a363-5f6bb818c3ec"),
-                            Category = "Book",
+                            Id = new Guid("c8b39dc8-2ee6-4dcf-b309-97d1369a3117"),
+                            Category = "Books",
                             Description = "The epic conclusion of the War of the Ring.",
                             Name = "The Return of the King",
                             Price = 269m,
@@ -184,8 +184,8 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("43d069af-3a6b-4a71-9086-86dccf419c66"),
-                            Category = "Book",
+                            Id = new Guid("22b06d78-512b-46d5-a6d2-6b99f9a87405"),
+                            Category = "Books",
                             Description = "A standalone Witcher novel.",
                             Name = "Season of Storms",
                             Price = 189m,
@@ -193,7 +193,7 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f5865d9f-0408-4ca9-8e14-e74fe3e39a2b"),
+                            Id = new Guid("80793044-1b16-4c20-9751-4ff4978b2e6a"),
                             Category = "Clothing",
                             Description = "T-shirt with the cover art for the Season of Storms book.",
                             Name = "Season of Storms t-shirt M",
@@ -202,7 +202,7 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("6ebb72a6-bcb9-48d7-a5f1-59b79f29aac3"),
+                            Id = new Guid("d6cabbc5-0746-4bde-9575-42f7000ee478"),
                             Category = "Clothing",
                             Description = "T-shirt with the cover art for the Blood of Elves book.",
                             Name = "Blood of Elves t-shirt M",
@@ -211,7 +211,7 @@ namespace GradTest.Migrations
                         },
                         new
                         {
-                            Id = new Guid("9a880538-161e-4bd9-94b2-5f586e9169c9"),
+                            Id = new Guid("29d7d314-6f36-48c4-9bd5-1f36083b70b7"),
                             Category = "Clothing",
                             Description = "T-shirt with the cover art for the The Two Towers book.",
                             Name = "The Two Towers t-shirt M",
