@@ -14,13 +14,13 @@ public class CreateOrderCommandResponse
 
     public List<OrderProduct> Products { get; init; } = [];
 
-    public CreateOrderCommandResponse(Order order)
+    public CreateOrderCommandResponse(Order order, List<OrderProduct> products)
     {
         Id = order.Id;
         UserId = order.UserId;
         OrderDate = order.OrderDate;
         ZarToUsd = order.ZarToUsd;
-        Products = order.Products;
+        Products = products;
     }
     
     public CreateOrderCommandResponse() {}
