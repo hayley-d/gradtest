@@ -6,7 +6,7 @@ public static class ApiRoutes
         {
             public const string Create = "/orders";
             public const string GetById = "/orders/{id}";
-            public const string GetAll = "/orders";
+            public const string GetAll = "/orders/all";
             public const string GetByUserId = "/orders";
         }
 

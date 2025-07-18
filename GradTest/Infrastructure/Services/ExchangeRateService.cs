@@ -1,7 +1,8 @@
 using GradTest.Domain.Entities;
+using GradTest.Services;
 using GradTest.Utils;
 
-namespace GradTest.Services;
+namespace GradTest.Infrastructure.Services;
 
 
 
@@ -30,7 +31,7 @@ public class ExchangeRateService: IExchangeRateService
    {
       try
       {
-         string apiKey = ConnectionStrings.GetApiKey();
+         var apiKey = _config?["ExchangeApiKey"];
 
          if (string.IsNullOrWhiteSpace(apiKey))
          {

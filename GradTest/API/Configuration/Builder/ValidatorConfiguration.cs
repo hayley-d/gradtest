@@ -3,6 +3,7 @@ using GradTest.Application.Orders.Commands.CreateOrderCommand;
 using GradTest.Application.Products.Commands.CreateProductCommand;
 using GradTest.Application.Products.Commands.DeleteProductCommand;
 using GradTest.Application.Products.Commands.UpdateProductCommand;
+using GradTest.Application.Products.Queries.ListProductsQuery;
 
 namespace GradTest.API.Configuration.Builder;
 
@@ -27,7 +28,8 @@ public static class ValidatorConfiguration
     {
         builder.Services.AddValidatorsFromAssemblyContaining<CreateProductCommandValidator>();
         builder.Services.AddValidatorsFromAssemblyContaining<UpdateProductCommandValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<DeleteProductCommandValidator>();       
+        builder.Services.AddValidatorsFromAssemblyContaining<DeleteProductCommandValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<ListProductsQueryValidator>();
         
         return builder;
     }

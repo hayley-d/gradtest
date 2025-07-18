@@ -4,7 +4,9 @@ using GradTest.Application.Products.Commands.DeleteProductCommand;
 using GradTest.Application.Products.Commands.UpdateProductCommand;
 using GradTest.Application.Products.Queries.GetProductByIdQuery;
 using GradTest.Application.Products.Queries.ListProductsQuery;
+using Hangfire;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GradTest.API.Endpoints.Products;
 
@@ -19,36 +21,36 @@ public static class MapProductsEndpoint
 
     private static IEndpointRouteBuilder MapProductCommands(this IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiRoutes.Products.Create, async (CreateProductCommand command, IMediator mediator) =>
+        app.MapPost(ApiRoutes.Products.Create, async ([FromBody] CreateProductCommand command, [FromServices] IMediator mediator) =>
         {
             var result = await mediator.Send(command);
             return Results.Created($"/products/{result.Id}", result);
-        });
+        }).RequireAuthorization("Admin");
         
-        app.MapPut(ApiRoutes.Products.Update, async (UpdateProductCommand command, IMediator mediator) =>
+        app.MapPut(ApiRoutes.Products.Update, async ([FromBody] UpdateProductCommand command, [FromServices] IMediator mediator) =>
         {
             await mediator.Send(command);
             return Results.Ok();
-        });
+        }).RequireAuthorization("Admin");
         
-        app.MapDelete(ApiRoutes.Products.Delete, async (DeleteProductCommand command, IMediator mediator) =>
+        app.MapDelete(ApiRoutes.Products.Delete, async ([FromBody] DeleteProductCommand command, [FromServices] IMediator mediator) =>
         {
             await mediator.Send(command);
             return Results.Ok();
-        });
+        }).RequireAuthorization("Admin");
         
         return app;
     }
     
     private static IEndpointRouteBuilder MapProductQueries(this IEndpointRouteBuilder app)
     {
-        app.MapPost(ApiRoutes.Products.List, async (ListProductsQuery query, IMediator mediator) =>
+        app.MapGet(ApiRoutes.Products.List, async ([AsParameters] ListProductsQuery query, [FromServices] IMediator mediator) =>
         {
             var result = await mediator.Send(query);
             return Results.Ok(result);
         });
         
-        app.MapPost(ApiRoutes.Products.GetById, async (GetProductByIdQuery query, IMediator mediator) =>
+        app.MapGet(ApiRoutes.Products.GetById, async ([AsParameters] GetProductByIdQuery query, [FromServices] IMediator mediator) =>
         {
             var result = await mediator.Send(query);
             return Results.Ok(result);

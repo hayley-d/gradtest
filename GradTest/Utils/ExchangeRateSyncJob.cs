@@ -1,4 +1,4 @@
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Services;
 
 namespace GradTest.Utils;
