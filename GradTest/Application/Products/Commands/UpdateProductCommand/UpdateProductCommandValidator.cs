@@ -1,5 +1,6 @@
 using System.Data;
 using FluentValidation;
+using GradTest.Domain.Enums;
 using GradTest.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,12 +25,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
          .NotEmpty().WithMessage("Product description must be provided.")
          .MaximumLength(350).WithMessage("Product description must be at most 350 characters long.");
 
-      RuleFor(product => product.CategoryValue)
-         .NotNull().WithMessage("Category value must be provided.")
-         .LessThanOrEqualTo(3)
-         .WithMessage("Category value must be greater than or equal to 0 and less than or equal to 3.")
-         .GreaterThanOrEqualTo(0)
-         .WithMessage("Category value must be greater than or equal to 0 and less than or equal to 3.");
+      RuleFor(command => command.CategoryName)
+         .NotNull().WithMessage("CategoryName is required.")
+         .NotEmpty().WithMessage("CategoryName must be provided.")
+         .Must(BeAValidCategory).WithMessage("CategoryName is not valid.");
 
       RuleFor(product => product.Price)
          .NotNull().WithMessage("Price must be provided.")
@@ -40,5 +39,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
          .NotNull().WithMessage("Stock quantity must be provided.")
          .GreaterThanOrEqualTo(0).WithMessage("Stock quantity must be greater than or equal to 0.")
          .LessThan(int.MaxValue).WithMessage("Stock quantity value is too large.");
+   }
+   
+   private static bool BeAValidCategory(string categoryName)
+   {
+      return Category.TryFromName(categoryName, ignoreCase: true, out _);
    }
 }
