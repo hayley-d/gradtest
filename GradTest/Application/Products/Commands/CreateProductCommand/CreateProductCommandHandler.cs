@@ -1,5 +1,6 @@
 using GradTest.Domain.Entities;
-using GradTest.Persistence;
+using GradTest.Domain.Enums;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Utils;
 using MediatR;
 
@@ -8,31 +9,21 @@ namespace GradTest.Application.Products.Commands.CreateProductCommand;
 public class CreateProductCommandHandler: IRequestHandler<CreateProductCommand, CreateProductCommandResponse>
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CreateProductCommandHandler(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
+    public CreateProductCommandHandler(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
-        _httpContextAccessor = httpContextAccessor;
     }
     
     public async Task<CreateProductCommandResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext!;
-        await AuthenticationMiddleware.AdminAuthorize(httpContext);
-
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-            throw new UnauthorizedAccessException();
-        
-        var userId = await AuthenticationMiddleware.GetUserID(httpContext);
-        if (string.IsNullOrEmpty(userId))
-            throw new UnauthorizedAccessException(); 
+        var category = Category.FromName(request.CategoryName); 
         
         var newProduct = new Product
         {
             Id = Guid.NewGuid(),
             Name = request.Name,
-            CategoryValue = request.Category.Value,
+            Category = category,
             Description = request.Description,
             Price = request.Price,
             StockQuantity = request.StockQuantity 
