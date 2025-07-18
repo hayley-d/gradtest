@@ -1,9 +1,10 @@
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Utils;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
-namespace GradTest.Application.Orders.Queries.GetOrderById;
+namespace GradTest.Application.Orders.Queries.GetOrderByIdQuery;
 
 public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, GetOrderByIdQueryResponse>
 {
@@ -19,10 +20,6 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, GetOr
     public async Task<GetOrderByIdQueryResponse> Handle(GetOrderByIdQuery query, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext;
-        await AuthenticationMiddleware.AdminAuthorize(httpContext);
-
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-            throw new UnauthorizedAccessException();
 
         var userId = await AuthenticationMiddleware.GetUserID(httpContext);
             
@@ -32,10 +29,7 @@ public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, GetOr
         var order = await _dbContext.Orders.FirstOrDefaultAsync(order => order.Id == query.OrderId, cancellationToken: cancellationToken);
 
         if (order is null)
-            throw new KeyNotFoundException();
-
-        if (order.UserId != userId)
-            throw new UnauthorizedAccessException();
+            throw new KeyNotFoundException("No order found with the specified id.");
 
         return new GetOrderByIdQueryResponse(order);
     }
