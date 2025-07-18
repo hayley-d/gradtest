@@ -1,4 +1,4 @@
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Utils;
 using MediatR;
 
@@ -17,17 +17,10 @@ public class DeleteProductCommandHandle : IRequestHandler<DeleteProductCommand>
     
     public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken)
     {
-        var httpContext = _httpContextAccessor.HttpContext!;
-        await AuthenticationMiddleware.AdminAuthorize(httpContext);
-
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-            throw new UnauthorizedAccessException();
-        
-        var userId = await AuthenticationMiddleware.GetUserID(httpContext);
-        if (string.IsNullOrEmpty(userId))
-            throw new UnauthorizedAccessException();
-        
         var product = await _dbContext.Products.FindAsync([request.ProductId], cancellationToken: cancellationToken);
+
+        if (product == null)
+            throw new KeyNotFoundException("No product found with matching id.");
             
         _dbContext.Products.Remove(product);
             

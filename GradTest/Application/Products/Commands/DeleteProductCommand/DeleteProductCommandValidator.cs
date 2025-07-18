@@ -1,5 +1,5 @@
 using FluentValidation;
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace GradTest.Application.Products.Commands.DeleteProductCommand;
