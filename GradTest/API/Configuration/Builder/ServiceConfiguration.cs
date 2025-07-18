@@ -2,6 +2,7 @@ using FluentValidation;
 using GradTest.Application.Common.Behaviors;
 using GradTest.Application.Orders.Commands.CreateOrderCommand;
 using GradTest.Domain.Enums;
+using GradTest.Infrastructure.Services;
 using GradTest.Services;
 using GradTest.Utils;
 using Hangfire;
@@ -56,9 +57,14 @@ public static class ServiceConfiguration
         
         const string displayName = "Grad Test API";
         
-        var authorizationUrl = builder.Configuration["OIDC:AuthorizeUrl"]!;
+        var authorizationUrl = builder.Configuration["OIDC:AuthorizeUrl"];
         
-        var tokenUrl = builder.Configuration["OIDC:TokenUrl"]!;
+        var tokenUrl = builder.Configuration["OIDC:TokenUrl"];
+        
+        if (string.IsNullOrWhiteSpace(authorizationUrl) || string.IsNullOrWhiteSpace(tokenUrl))
+        {
+            throw new InvalidOperationException("Missing OIDC configuration for Swagger.");
+        }
         
         builder.Services.AddSwaggerGen(options =>
         {
@@ -110,7 +116,8 @@ public static class ServiceConfiguration
     
     private static WebApplicationBuilder SetupHangfireServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(ConnectionStrings.GetPostgresConnectionString()));
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+        builder.Services.AddHangfire(config => config.UsePostgreSqlStorage(connectionString));
         builder.Services.AddHangfireServer();
         return builder;
     }
