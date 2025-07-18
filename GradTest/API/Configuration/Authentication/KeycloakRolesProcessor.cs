@@ -25,7 +25,6 @@ public static class KeycloakRolesProcessor
         public string[] Roles { get; set; } = [];
     }
 
-
     private class TokenRoles
     {
         [JsonPropertyName("roles")]
@@ -48,8 +47,6 @@ public static class KeycloakRolesProcessor
             {
                 claims = clientRoles.Roles.Select(role => new Claim(ClaimsConstants.Role, role));
             }
-            //var des = JsonSerializer.Deserialize<KeycloakRolesDto>(resourceAccess);
-            //claims = des?.ApiRoles.Roles.Select(x => new Claim(ClaimsConstants.Role, x)) ?? [];
         }
 
         var identity = context.Principal!.Identity as ClaimsIdentity;
