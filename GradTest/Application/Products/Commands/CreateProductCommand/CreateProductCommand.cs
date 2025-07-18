@@ -55,7 +55,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(command => command.CategoryName)
             .NotNull().WithMessage("CategoryName is required.")
             .NotEmpty().WithMessage("CategoryName must be provided.")
-            .Must(BeAValidCategory).WithMessage("CategoryName is not valid.").WithMessage($"CategoryName must be one of: {string.Join(", ", Category.List().Select(category => category.Name))}");
+            .Must(BeAValidCategory).WithMessage("CategoryName is not valid.");
 
         RuleFor(command => command.Price)
             .GreaterThanOrEqualTo(0).WithMessage("Price must be a positive number.")
