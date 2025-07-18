@@ -35,12 +35,17 @@ public class ApplicationDbContext : DbContext
             .HasConversion<CategoryValueConverter>();
         
         modelBuilder.Entity<Product>().HasData(
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "The witcher book", Name = "The witcher 1", Price = 99, StockQuantity = 7},
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "The witcher book 2", Name = "The witcher 2", Price = 99, StockQuantity = 7},
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "The witcher book 3", Name = "The witcher 3", Price = 99, StockQuantity = 7},
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "Lotr book 1", Name = "Lord of the Rings 1", Price = 99, StockQuantity = 7},
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "Lotr book 2", Name = "Lord of the Rings 2", Price = 99, StockQuantity = 7},
-            new Product { Id = Guid.NewGuid(), Category = Category.Books, Description = "Lotr book 3", Name = "Lord of the Rings 3", Price = 99, StockQuantity = 7}
+            new Product { Id = Guid.NewGuid(), Name = "The Silmarillion", Description = "A mythic history of Middle-earth by J.R.R. Tolkien.", Price = 299.99m, Category = Category.Books, StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "Blood of Elves", Description = "The first novel in the Witcher Saga by Andrzej Sapkowski.", Price = 199.99m, Category = Category.Books,  StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "The Two Towers", Description = "The second volume of The Lord of the Rings.", Price = 249.99m, Category = Category.Books, StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "Time of Contempt", Description = "Geralt continues his journey amidst political tension.", Price = 189.99m, Category = Category.Books, StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "The Hobbit", Description = "Bilbo’s adventure to the Lonely Mountain.", Price = 219.99m, Category = Category.Books, StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "Lady of the Lake", Description = "Final book in the Witcher Saga.", Price = 209,  Category = Category.Books, StockQuantity = 400 },
+            new Product { Id = Guid.NewGuid(), Name = "The Return of the King", Description = "The epic conclusion of the War of the Ring.", Price = 269, Category = Category.Books, StockQuantity = 400},
+            new Product { Id = Guid.NewGuid(), Name = "Season of Storms", Description = "A standalone Witcher novel.", Price = 189, Category = Category.Books, StockQuantity = 400 },
+            new Product { Id = Guid.NewGuid(), Name = "Season of Storms t-shirt M" , Description = "T-shirt with the cover art for the Season of Storms book.", Price = 189, Category = Category.Clothing, StockQuantity = 400 },
+            new Product { Id = Guid.NewGuid(), Name = "Blood of Elves t-shirt M" , Description = "T-shirt with the cover art for the Blood of Elves book.", Price = 189, Category = Category.Clothing, StockQuantity = 400 },
+            new Product { Id = Guid.NewGuid(), Name = "The Two Towers t-shirt M" , Description = "T-shirt with the cover art for the The Two Towers book.", Price = 189, Category = Category.Clothing, StockQuantity = 400 }
         );
     }
 }

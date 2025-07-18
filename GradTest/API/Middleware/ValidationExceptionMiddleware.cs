@@ -31,6 +31,7 @@ public class ValidationExceptionMiddleware
                         group => group.Key,
                         group => group
                             .Select(e => e.ErrorMessage)
+                            .Distinct()
                             .ToArray())
             )
             {

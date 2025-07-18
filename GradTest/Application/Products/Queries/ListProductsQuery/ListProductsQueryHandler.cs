@@ -1,5 +1,6 @@
 using GradTest.Domain.Enums;
 using GradTest.Infrastructure.Persistence;
+using GradTest.Infrastructure.Persistence.Converters;
 using GradTest.Utils;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, ListP
         var productsQuery = _dbContext.Products.AsQueryable();
 
         if (request.CategoryName is not null)
-            productsQuery = productsQuery.Where(p => p.Category.Name.Equals(request.CategoryName));
+            productsQuery = productsQuery.Where(p => p.Category.Name.Equals(request.CategoryName)); 
         
         productsQuery = productsQuery.Where(p => p.Price >= request.MinPrice);
         productsQuery = productsQuery.Where(p => p.Price <= request.MaxPrice);
