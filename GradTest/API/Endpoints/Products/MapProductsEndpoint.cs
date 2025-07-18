@@ -25,19 +25,19 @@ public static class MapProductsEndpoint
         {
             var result = await mediator.Send(command);
             return Results.Created($"/products/{result.Id}", result);
-        }).RequireAuthorization("Admin");
+        })/*.RequireAuthorization("Admin")*/;
         
         app.MapPut(ApiRoutes.Products.Update, async ([FromBody] UpdateProductCommand command, [FromServices] IMediator mediator) =>
         {
             await mediator.Send(command);
             return Results.Ok();
-        }).RequireAuthorization("Admin");
+        })/*.RequireAuthorization("Admin")*/;
         
         app.MapDelete(ApiRoutes.Products.Delete, async ([FromBody] DeleteProductCommand command, [FromServices] IMediator mediator) =>
         {
             await mediator.Send(command);
             return Results.Ok();
-        }).RequireAuthorization("Admin");
+        })/*.RequireAuthorization("Admin")*/;
         
         return app;
     }

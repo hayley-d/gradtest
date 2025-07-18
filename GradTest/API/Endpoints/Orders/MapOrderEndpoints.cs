@@ -6,6 +6,7 @@ using GradTest.Application.Orders.Queries.GetOrderByUserQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Sprache;
 
 namespace GradTest.API.Endpoints.Orders;
 
@@ -22,9 +23,18 @@ public static class MapOrderEndpoints
     {
         app.MapPost(ApiRoutes.Orders.Create, async ( [FromBody] CreateOrderCommand command, [FromServices] IMediator mediator) =>
         {
-            var result = await mediator.Send(command);
+            CreateOrderCommandResponse result;
+            try
+            {
+                result = await mediator.Send(command);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+
             return Results.Created($"/orders/{result.Id}", result);
-        }).RequireAuthorization("Admin");
+        })/*.RequireAuthorization("Admin")*/;
 
         return app;
     }
@@ -33,20 +43,50 @@ public static class MapOrderEndpoints
     {
         app.MapGet(ApiRoutes.Orders.GetAll, async ([AsParameters] GetAllOrdersQuery query, [FromServices] IMediator mediator) =>
         {
-            var result = await mediator.Send(query);
-            return Results.Ok(result);
-        }).RequireAuthorization("Admin");
+            IList<GetAllOrdersQueryResponse> result = [];
+            
+            try
+            {
+                result = await mediator.Send(query);
+
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+            
+            return Results.Ok(result);               
+        })/*.RequireAuthorization("Admin")*/;
 
         app.MapGet(ApiRoutes.Orders.GetById, async ([AsParameters] GetOrderByIdQuery query, [FromServices] IMediator mediator) =>
         {
-            var result = await mediator.Send(query);
+            GetOrderByIdQueryResponse result;
+            try
+            {
+                result = await mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(ex.Message);
+            }
+
             return Results.Ok(result);
             ;
         });
 
         app.MapGet(ApiRoutes.Orders.GetByUserId, async ([AsParameters] GetOrderByUserQuery query, [FromServices] IMediator mediator) =>
         {
-            var result = await mediator.Send(query);
+            IList<GetOrderByUserQueryResponse> result;
+            
+            try
+            {
+                result = await mediator.Send(query);
+            }
+            catch (Exception ex)
+            {
+                return Results.BadRequest(ex.Message);                
+            }
+
             return Results.Ok(result);
         });
 
