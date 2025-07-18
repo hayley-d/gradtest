@@ -1,5 +1,6 @@
 using GradTest.Domain.Entities;
-namespace GradTest.Application.Orders.Queries.GetAllOrders;
+
+namespace GradTest.Application.Orders.Queries.GetAllOrdersQuery;
 
 public class GetAllOrdersQueryResponse
 {
@@ -11,7 +12,7 @@ public class GetAllOrdersQueryResponse
 
     public decimal ZarToUsd { get; init; }
 
-    public List<OrderProduct> Products { get; init; } = new();
+    public List<OrderProduct> Products { get; init; } = [];
 
     public GetAllOrdersQueryResponse(Order order)
     {
