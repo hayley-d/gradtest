@@ -1,10 +1,9 @@
-using GradTest.Application.Orders.Queries.GetOrderById;
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Utils;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace GradTest.Application.Orders.Queries.GetOrderByUser;
+namespace GradTest.Application.Orders.Queries.GetOrderByUserQuery;
 
 public class GetOrderByUserQueryHandler : IRequestHandler<GetOrderByUserQuery, IList<GetOrderByUserQueryResponse>>
 {
@@ -20,10 +19,6 @@ public class GetOrderByUserQueryHandler : IRequestHandler<GetOrderByUserQuery, I
     public async Task<IList<GetOrderByUserQueryResponse>> Handle(GetOrderByUserQuery query, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext;
-        await AuthenticationMiddleware.AdminAuthorize(httpContext);
-
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-            throw new UnauthorizedAccessException();
 
         var userId = await AuthenticationMiddleware.GetUserID(httpContext);
             

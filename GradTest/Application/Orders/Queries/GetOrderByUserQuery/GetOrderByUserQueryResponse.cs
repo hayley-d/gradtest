@@ -1,6 +1,6 @@
 using GradTest.Domain.Entities;
 
-namespace GradTest.Application.Orders.Queries.GetOrderByUser;
+namespace GradTest.Application.Orders.Queries.GetOrderByUserQuery;
 
 public class GetOrderByUserQueryResponse
 {
@@ -12,7 +12,7 @@ public class GetOrderByUserQueryResponse
 
     public decimal ZarToUsd { get; init; }
 
-    public List<OrderProduct> Products { get; init; } = new();
+    public List<OrderProduct> Products { get; init; } = [];
 
     public GetOrderByUserQueryResponse(Order order)
     {
