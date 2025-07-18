@@ -12,7 +12,7 @@ public class CreateOrderCommandResponse
 
     public decimal ZarToUsd { get; init; }
 
-    public List<OrderProduct> Products { get; init; } = new();
+    public List<OrderProduct> Products { get; init; } = [];
 
     public CreateOrderCommandResponse(Order order)
     {

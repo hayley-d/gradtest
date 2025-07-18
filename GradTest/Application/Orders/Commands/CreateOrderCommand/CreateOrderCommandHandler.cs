@@ -1,5 +1,5 @@
 using GradTest.Domain.Entities;
-using GradTest.Persistence;
+using GradTest.Infrastructure.Persistence;
 using GradTest.Services;
 using GradTest.Utils;
 using MediatR;
@@ -24,12 +24,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
     public async Task<CreateOrderCommandResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
     {
         var httpContext = _httpContextAccessor.HttpContext!;
-        await AuthenticationMiddleware.AdminAuthorize(httpContext);
 
-        if (httpContext.Response.StatusCode == StatusCodes.Status401Unauthorized)
-            throw new UnauthorizedAccessException();
-        
         var userId = await AuthenticationMiddleware.GetUserID(httpContext);
+        
         if (string.IsNullOrEmpty(userId))
             throw new UnauthorizedAccessException();
         
@@ -46,7 +43,9 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
                 throw new NullReferenceException("Exchange rate not available.");        
             
             _dbContext.ExchangeRates.Add(liveRate);
+            
             await _dbContext.SaveChangesAsync(cancellationToken);
+            
             latestRate = liveRate.ZAR;
         }
 
@@ -61,6 +60,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
                 throw new InvalidOperationException($"Insufficient stock for product {product.ProductId}.");        
             
             dbProduct.StockQuantity -= product.Quantity;
+            
             _dbContext.Products.Update(dbProduct);
         }
         
@@ -78,6 +78,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Cre
         };
 
         _dbContext.Orders.Add(order);
+        
         await _dbContext.SaveChangesAsync(cancellationToken);
 
         return new CreateOrderCommandResponse(order);
